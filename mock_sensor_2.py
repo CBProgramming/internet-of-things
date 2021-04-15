@@ -8,6 +8,7 @@ import errno # error code matcher
 my_username = "Mock Sensor 2"
 port = nc.get_port()
 ip_address = nc.get_ip()
+#ip_address = '192.168.0.5'
 header_length = nc.get_header_length()
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
