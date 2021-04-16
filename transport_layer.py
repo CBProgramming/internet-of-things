@@ -1,13 +1,13 @@
 import socket, traceback
 import network_config as nc
 import select
+import pickle
 
 def initialise_socket():
-    print(socket.gethostname())
+    #print(socket.gethostname())
     port = nc.get_port()
     ip_address = nc.get_ip()
-    #ip_address = '192.168.0.5'
-    print(ip_address)
+    #print(ip_address)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # instantiate socket
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # setup reusable address
     server_socket.bind((ip_address, port))
@@ -32,16 +32,13 @@ def handle_new_connection(server_socket, clients):
     if user is not False:
         sockets_list.append(client_socket)
         clients[client_socket] = user
-        username = user['data'].decode('utf-8')
-        print(username)
+        username = user['data']
         print(f"Accepted new connection from {client_address[0]}:{client_address[1]} username:{username}")
     return sockets_list, clients
 
 def receive_message(client_socket):
     try:
-        print("Receiving message")
         message_header = client_socket.recv(header_length)
-        print(message_header)
         # handle no data received
         if not len(message_header):
             return False
@@ -49,21 +46,24 @@ def receive_message(client_socket):
         else:
             message_length = int(message_header.decode("utf-8").strip())
             data = client_socket.recv(message_length) #might need to handle for excessive length
-            return {"header":message_header, "data": data }
+            unpickled_data = pickle.loads(data)
+            return {"header":message_header, "data": unpickled_data }
     except:
         return False
 
 def handle_message_received(notified_socket, sockets_list, clients):
     message = receive_message(notified_socket)
     if message is False:
-        print(f"Closed connection from {clients[notified_socket]['data'].decode('utf-8')}")
+        print(f"Closed connection from {clients[notified_socket]['data']}")
         return remove_client_socket(notified_socket, sockets_list, clients)
     user = clients[notified_socket]
-    print(f"Received message from {user['data'].decode('utf-8')}:{message['data'].decode('utf-8')}")
+    print(f"Received message: {message['data']}")
     # send message to all other clients  ###BUSINESS LOGIC GOES HERE###
     for client_socket in clients:
         if client_socket != notified_socket:
-            client_socket.send(user['header'] + user['data'] + message['header'] + message['data'])
+            pickled_message_data = pickle.dumps(message['data'])
+            message_header = f"{len(pickled_message_data) :< {header_length}}".encode('utf-8')
+            client_socket.send(message_header + pickled_message_data)
     return sockets_list, clients
 
 def handle_exception_sockets(read_sockets, server_socket, sockets_list, clients):
