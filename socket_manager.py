@@ -1,4 +1,4 @@
-import os, socket, select, time, errno, pickle
+import socket, time, errno, pickle
 import network_config as nc
 
 empty_string = ''
