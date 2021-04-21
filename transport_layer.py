@@ -4,10 +4,8 @@ import select
 import pickle
 
 def initialise_socket():
-    #print(socket.gethostname())
     port = nc.get_port()
     ip_address = nc.get_ip()
-    #print(ip_address)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # instantiate socket
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # setup reusable address
     server_socket.bind((ip_address, port))
