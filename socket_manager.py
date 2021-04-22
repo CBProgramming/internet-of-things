@@ -38,8 +38,8 @@ def send_message(client_socket, message):
         else:
             print("No message")
             return False
-    except:
-        print("Send message exception")
+    except Exception as e:
+        print("Send message exception: " + str(e))
         return False
 
 def receive_message(client_socket):
