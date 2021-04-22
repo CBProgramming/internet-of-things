@@ -9,10 +9,8 @@ def handle_read_sockets(read_sockets, server_socket, sockets_list, clients):
 
 def handle_read_socket(notified_socket, server_socket, sockets_list, clients):
         if notified_socket == server_socket:
-            print("Registering new socket")
             sockets_list, clients = handle_new_connection(sockets_list, server_socket, clients)
         else:
-            print("Receiving message from socket")
             sockets_list, clients = handle_message_received(notified_socket, sockets_list, clients)
         return sockets_list, clients
 
@@ -40,7 +38,7 @@ def receive_message(client_socket):
             unpickled_data = pickle.loads(data)
             return {"header":message_header, "data": unpickled_data }
     except Exception as e:
-        print("hmh exception: " + str(e))
+        print("Read socket handler exception: " + str(e))
         return False
 
 def handle_message_received(notified_socket, sockets_list, clients):

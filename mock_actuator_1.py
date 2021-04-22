@@ -8,10 +8,11 @@ client_socket = sm.get_socket()
 # register socket with transport layer
 registered = False
 while not registered:
-    print("Attempting to register")
     registered = sm.register(username, client_socket)
-    time.sleep(1) # this might need better handling as currently it just
-                  # spams the network every second
+    if not registered:
+        print("Registration attempt failed")
+        time.sleep(1) # this might need better handling as currently it just
+                      # spams the network every second
 
 #messaging loop
 while True:
