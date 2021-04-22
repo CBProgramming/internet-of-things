@@ -1,7 +1,6 @@
-import socket, traceback
+import socket, traceback, select, pickle
 import network_config as nc
-import select
-import pickle
+import hub_message_handler as hmh
 
 def initialise_socket():
     port = nc.get_port()
@@ -19,12 +18,12 @@ def handle_read_sockets(read_sockets, server_socket, sockets_list, clients):
 
 def handle_read_socket(notified_socket, server_socket, sockets_list, clients):
         if notified_socket == server_socket:
-            sockets_list, clients = handle_new_connection(server_socket, clients)
+            sockets_list, clients = handle_new_connection(sockets_list, server_socket, clients)
         else:
             sockets_list, clients = handle_message_received(notified_socket, sockets_list, clients)
         return sockets_list, clients
 
-def handle_new_connection(server_socket, clients):
+def handle_new_connection(sockets_list, server_socket, clients):
     client_socket, client_address = server_socket.accept()
     user = receive_message(client_socket)
     if user is not False:
