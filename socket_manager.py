@@ -1,5 +1,6 @@
-import socket, time, errno, pickle
+import socket, errno, pickle
 import network_config as nc
+import network_pickler as np
 
 empty_string = ''
 invalid_header = 'INVALID_HEADER'
@@ -18,47 +19,34 @@ def get_socket():
 
 def register(username, client_socket):
     try:
-        username_pickle = pickle.dumps(username)
-        header_length = nc.get_header_length()
-        username_header = f"{len(username_pickle):<{header_length}}".encode('utf-8')
-        client_socket.sendall(username_header + username_pickle)
+        pickled_message = np.pickle_message(username)
+        client_socket.send(pickled_message)
         return True
-    except:
+    except Exception as e:
+        print("Socket manager registration exception: " + str(e))
         return False
 
 
 def send_message(client_socket, message):
     try:
         if message:
-            message_pickle = pickle.dumps(message)
-            header_length = nc.get_header_length()
-            message_header = f"{len(message_pickle) :< {header_length}}".encode('utf-8')
-            client_socket.send(message_header + message_pickle)
+            pickled_message = np.pickle_message(message)
+            client_socket.send(pickled_message)
             return True
         else:
-            print("No message")
+            print("An attempt was made to send an empty message")
             return False
     except Exception as e:
-        print("Send message exception: " + str(e))
+        print("Socket manager send message exception: " + str(e))
         return False
 
 def receive_message(client_socket):
     try:
-        header_length = nc.get_header_length()
-        while True:
-            message_header = client_socket.recv(header_length)
-            if not len(message_header):
-                return [invalid_header, empty_string]
-            message_length = int(message_header.decode('utf-8').strip())
-            message = client_socket.recv(message_length)
-            unpickled_message = pickle.loads(message)
-            return [ok_result, unpickled_message]
-    #once there are no messages to receive an error will break the inner while loop
+        return np.unpickle_message(client_socket)
     except IOError as e:
         if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
             return [no_messages, str(e)]
         return [no_messages, str(e)]
     except Exception as e:
-        print("Receive message exception: " + str(e))
+        print("Socket manager receive message exception: " + str(e))
         return [error, e]
-        
