@@ -1,6 +1,7 @@
 import socket, time, errno, pickle
 import network_config as nc
 import bad_socket_handler as bsh
+import hub_message_handler as hmh
 
 def handle_read_sockets(read_sockets, server_socket, sockets_list, clients):
     for notified_socket in read_sockets:
@@ -46,13 +47,6 @@ def handle_message_received(notified_socket, sockets_list, clients):
     if message is False:
         print(f"Closed connection from {clients[notified_socket]['data']}")
         return bsh.remove_client_socket(notified_socket, sockets_list, clients)
-    user = clients[notified_socket]
-    print(f"Received message: {message['data']}")
-    # send message to all other clients  ###BUSINESS LOGIC GOES HERE###
-    for client_socket in clients:
-        if client_socket != notified_socket:
-            header_length = nc.get_header_length()
-            pickled_message_data = pickle.dumps(message['data'])
-            message_header = f"{len(pickled_message_data) :< {header_length}}".encode('utf-8')
-            client_socket.send(message_header + pickled_message_data)
+    else:
+        sockets_list, clients = hmh.handle_message(sockets_list, clients, notified_socket, message)
     return sockets_list, clients
