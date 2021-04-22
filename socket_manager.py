@@ -59,5 +59,6 @@ def receive_message(client_socket):
             return [no_messages, str(e)]
         return [no_messages, str(e)]
     except Exception as e:
+        print("Receive message exception: " + str(e))
         return [error, e]
         
