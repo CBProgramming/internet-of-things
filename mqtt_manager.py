@@ -1,5 +1,6 @@
 import queue
 import paho.mqtt.client as mqtt
+import hub_message_handler as hmh
 
 class MqttManager:
     def __init__(self):
@@ -12,7 +13,6 @@ class MqttManager:
             return None
 
         def on_message(client, obj, msg):
-            print("Receiving messages")
             topic_payload = msg.topic
             device = get_device(topic_payload)
             if device:
@@ -28,14 +28,20 @@ class MqttManager:
         self.client.loop_start()
         self.client.on_message = on_message
 
-    def get_mqtt_messages_in_queue(self):
-        print("getting messages")
+    def handle_messages(self, clients, mqtt_messages):
+        for message in mqtt_messages:
+            hmh.handle_mqtt_message(clients, message, self.client)
+        return clients
+
+    def manage_queued_messages(self, clients):
         i = 0
         mqtt_messages = []
         while i < self.mqtt_queue.qsize():
             mqtt_messages.append(self.mqtt_queue.get())
             i = i + 1
-        return mqtt_messages
+        clients = self.handle_messages(clients, mqtt_messages)
+        return clients
 
     def stop_client(self):
+        print("Stopping mqtt loop")
         self.client.loop_stop()

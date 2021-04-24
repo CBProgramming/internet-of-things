@@ -19,9 +19,11 @@ def handle_read_socket(notified_socket, server_socket, sockets_list, clients):
 def handle_new_connection(sockets_list, server_socket, clients):
     client_socket, client_address = server_socket.accept()
     user = receive_message(client_socket)
-    if user is not False:
+    if user[0] == 'OK':
+        print("New user: ")
+        print(user[1])
         sockets_list.append(client_socket)
-        clients[client_socket] = user
+        clients[client_socket] = user[1]
         print(f"Accepted new connection from username:{user}")
     return sockets_list, clients
 
@@ -33,7 +35,7 @@ def handle_message_received(notified_socket, sockets_list, clients):
         return bsh.remove_client_socket(notified_socket, sockets_list, clients)
     elif message[0] != 'NO_MESSAGES':
         sender = clients[notified_socket]
-        hmh.handle_message(sockets_list, clients, notified_socket, message[1], sender)
+        hmh.handle_network_message(sockets_list, clients, notified_socket, message[1], sender)
     return sockets_list, clients
 
 def receive_message(client_socket):
