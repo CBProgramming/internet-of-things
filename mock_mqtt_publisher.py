@@ -7,7 +7,7 @@ def on_message(client, obj, msg):
 
 # set up client
 broker = "broker.hivemq.com"
-client = mqtt.Client("IoT_Phone_App_Publisher")
+client = mqtt.Client("Mock_IoT_Phone_App_Publisher")
 client.connect(broker)
 
 # define topics

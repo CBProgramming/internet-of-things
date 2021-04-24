@@ -20,9 +20,11 @@ while True:
     time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
     
     # set up dummy message
-    message = (f"{username} > Message number: " + str(count))
+    message = (f"Message number: " + str(count))
+    #message = [1, 'string', ['list', 0]]
+    print("Sending message: " + str(message))
     count = count + 1
-
+    
     # attempt to send message, variable 'success' stores a boolean
     # value indicating if message sending was successful
     success = sm.send_message(client_socket, message)

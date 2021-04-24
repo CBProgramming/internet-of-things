@@ -30,7 +30,7 @@ class MqttManager:
 
     def handle_messages(self, clients, mqtt_messages):
         for message in mqtt_messages:
-            hmh.handle_mqtt_message(clients, message, self.client)
+            hmh.handle_mqtt_message(clients, message)
         return clients
 
     def manage_queued_messages(self, clients):
@@ -45,3 +45,7 @@ class MqttManager:
     def stop_client(self):
         print("Stopping mqtt loop")
         self.client.loop_stop()
+
+    def publish_message(self, topic_key, message):
+        topic = self.topic_head + topic_key
+        self.client.publish(topic,message)

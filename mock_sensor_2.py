@@ -20,7 +20,7 @@ while True:
     time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
 
     # set up dummy message
-    message = (f"{username} > Message number: " + str(count))
+    message = (f"Message number: " + str(count))
     count = count + 1
 
     # attempt to send message, variable 'success' stores a boolean

@@ -23,7 +23,7 @@ while True:
         while True:
             read_sockets, write_sockets, exception_sockets = select.select(sockets_list, [], sockets_list, socket_timeout)
             if read_sockets:
-                sockets_list, clients = rsh.handle_read_sockets(read_sockets, server_socket, sockets_list, clients)
+                sockets_list, clients = rsh.handle_read_sockets(read_sockets, server_socket, sockets_list, clients, mqtt_manager)
             if exception_sockets:
                 sockets_list, clients = esh.handle_exception_sockets(exception_sockets, sockets_list, clients)
             clients = mqtt_manager.manage_queued_messages(clients)
