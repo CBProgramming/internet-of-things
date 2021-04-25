@@ -1,4 +1,4 @@
-import bad_socket_handler as bsh
+import hub_files.bad_socket_handler as bsh
 
 def handle_exception_sockets(exception_sockets, sockets_list, clients):
     for notified_socket in exception_sockets:

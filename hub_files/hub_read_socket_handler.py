@@ -1,17 +1,17 @@
 import socket
-import bad_socket_handler
-import hub_message_handler
-import network_pickler as np
-import mqtt_manager
+import hub_files.bad_socket_handler
+import hub_files.hub_message_handler
+import network_management.network_pickler as np
+import hub_files.mqtt_manager
 
 class ReadSocketHandler:
     def __init__ (self, server_socket):
         self.clients = {}
         self.server_socket = server_socket
         self.sockets = [server_socket]
-        self.bsh = bad_socket_handler.BadSocketHandler(self.sockets, self.clients)
-        self.mqtt_manager = mqtt_manager.MqttManager()
-        self.hmh = hub_message_handler.HubMessageHandler(self.clients, self.mqtt_manager)
+        self.bsh = hub_files.bad_socket_handler.BadSocketHandler(self.sockets, self.clients)
+        self.mqtt_manager = hub_files.mqtt_manager.MqttManager()
+        self.hmh = hub_files.hub_message_handler.HubMessageHandler(self.clients, self.mqtt_manager)
         
     def handle_read_sockets(self, read_sockets):
         for notified_socket in read_sockets:

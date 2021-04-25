@@ -1,6 +1,5 @@
 import time
-import network_config as nc
-import socket_manager as sm
+import network_management.socket_manager as sm
 
 username = "Mock Sensor 2"
 client_socket = sm.get_socket()

@@ -1,6 +1,6 @@
-import socket, errno, pickle
-import network_config as nc
-import network_pickler as np
+import socket, errno
+import network_management.network_config as nc
+import network_management.network_pickler as np
 
 empty_string = ''
 invalid_header = 'INVALID_HEADER'

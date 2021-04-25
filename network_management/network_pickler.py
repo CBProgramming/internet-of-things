@@ -1,5 +1,5 @@
 import pickle, errno
-import network_config as nc
+import network_management.network_config as nc
 
 def pickle_message(message):
     message_pickle = pickle.dumps(message)

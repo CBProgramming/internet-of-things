@@ -1,5 +1,5 @@
 import socket, json
-import network_pickler as np
+import network_management.network_pickler as np
 
 class HubMessageHandler():
 
