@@ -24,10 +24,16 @@ client.loop_start() #handles reconnects automatically
 
 #begin publishing loop
 count = 1
+message = ''
 while True:
-    client.publish(mock_actuator_1_topic,'ON ' + str(count + 100))
-    client.publish(mock_actuator_2_topic,'ON ' + str(count + 200))
-    client.publish(speaker_topic,'ON ' + str(count))
+    if (count%2) == 0:
+        message = 'ON'
+    else:
+        message = 'OFF'
+    client.publish(mock_actuator_1_topic, message + ' ' + str(count + 100))
+    client.publish(mock_actuator_2_topic, message + ' ' + str(count + 200))
+    client.publish(speaker_topic, message)
+    client.publish(camera_topic, message)
     print("count = " + str(count))
     count = count + 1
     time.sleep(1)
