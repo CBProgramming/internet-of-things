@@ -16,7 +16,7 @@ class ReadSocketHandler:
     def handle_read_sockets(self, read_sockets):
         for notified_socket in read_sockets:
             self.handle_read_socket(notified_socket)
-        self.clients = self.mqtt_manager.manage_queued_messages(self.clients)
+        self.mqtt_manager.manage_queued_messages()
 
     def handle_read_socket(self, notified_socket):
         if notified_socket == self.server_socket:

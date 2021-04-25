@@ -15,16 +15,16 @@ class HubMessageHandler():
         except Exception as e:
             print("Hub message publish error: " + str(e))
 
-    def handle_mqtt_message(self, network_clients, message):
+    def handle_mqtt_message(self, message):
         message_key = message[0]
         data = message[1]
-        for key, value in network_clients.items():
+        for key, value in self.clients.items():
             if message_key == value:
                 pickled_message = np.pickle_message(data)
                 key.send(pickled_message)
 
-    def send_to_all(self, clients, notified_socket, message):
-        for client_socket in clients:
+    def send_to_all(self, notified_socket, message):
+        for client_socket in self.clients:
             if client_socket != notified_socket:
                 pickled_message = np.pickle_message(message)
                 client_socket.send(pickled_message)

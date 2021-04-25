@@ -27,21 +27,17 @@ class MqttManager:
         self.client.loop_start()
         self.client.on_message = on_message
 
-    def handle_messages(self, clients, mqtt_messages):
+    def handle_messages(self, mqtt_messages):
         for message in mqtt_messages:
-            print("Handling mqtt messages")
-            self.hmh.handle_mqtt_message(clients, message)
-            print("Mqtt messages handled")
-        return clients
+            self.hmh.handle_mqtt_message(message)
 
-    def manage_queued_messages(self, clients):
+    def manage_queued_messages(self):
         i = 0
         mqtt_messages = []
         while i < self.mqtt_queue.qsize():
             mqtt_messages.append(self.mqtt_queue.get())
             i = i + 1
-        clients = self.handle_messages(clients, mqtt_messages)
-        return clients
+        self.handle_messages(mqtt_messages)
 
     def stop_client(self):
         print("Stopping mqtt loop")
