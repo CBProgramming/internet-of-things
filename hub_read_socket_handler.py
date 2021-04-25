@@ -1,5 +1,5 @@
 import socket
-import bad_socket_handler as bsh
+import bad_socket_handler
 import hub_message_handler as hmh
 import network_pickler as np
 
@@ -9,6 +9,7 @@ class ReadSocketHandler:
         self.clients = {}
         self.server_socket = server_socket
         self.sockets = [server_socket]
+        self.bsh = bad_socket_handler.BadSocketHandler(self.sockets, self.clients)
         
     def handle_read_sockets(self, read_sockets):
         for notified_socket in read_sockets:
@@ -33,7 +34,7 @@ class ReadSocketHandler:
         message = self.receive_message(notified_socket)
         if not message or message[0] == 'ERROR':
             print(f"Closed connection from device: {self.clients[notified_socket]}")
-            return bsh.remove_client_socket(notified_socket, self.sockets, self.clients)
+            self.bsh.remove_client_socket(notified_socket)
         elif message[0] != 'NO_MESSAGES':
             sender = self.clients[notified_socket]
             hmh.handle_network_message(self.clients, notified_socket, message[1], mqtt_manager)
