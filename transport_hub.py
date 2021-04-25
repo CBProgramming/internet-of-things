@@ -24,6 +24,9 @@ while True:
             if e_socks:
                 esh.handle_exception_sockets(e_socks, rsh.sockets, rsh.clients)  
     except Exception as e:
-        #rsh.mqtt_manager.stop_client()
+        try:
+            rsh.mqtt_manager.stop_client()
+        except:
+            None
         print("Transport hub exception: " + str(e))
         print("Rebooting hub...")
