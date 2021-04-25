@@ -1,6 +1,5 @@
 import queue
 import paho.mqtt.client as mqtt
-import hub_message_handler as hmh
 
 class MqttManager:
     def __init__(self):
@@ -30,7 +29,9 @@ class MqttManager:
 
     def handle_messages(self, clients, mqtt_messages):
         for message in mqtt_messages:
-            hmh.handle_mqtt_message(clients, message)
+            print("Handling mqtt messages")
+            self.hmh.handle_mqtt_message(clients, message)
+            print("Mqtt messages handled")
         return clients
 
     def manage_queued_messages(self, clients):

@@ -3,8 +3,8 @@ import paho.mqtt.client as mqtt
 import network_config as nc
 import hub_read_socket_handler as hrsh
 import hub_exception_socket_handler as esh
-import hub_message_handler as hmh
-import mqtt_manager as mm
+import hub_message_handler
+
 
 socket_timeout = 1
 
@@ -17,8 +17,7 @@ while True:
         server_socket.bind((ip_address, port))
         server_socket.listen()
         header_length = nc.get_header_length()
-        mqtt_manager = mm.MqttManager()
-        rsh = hrsh.ReadSocketHandler(mqtt_manager, server_socket)
+        rsh = hrsh.ReadSocketHandler(server_socket)
         while True:
             r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, socket_timeout)
             if r_socks:
@@ -26,6 +25,6 @@ while True:
             if e_socks:
                 esh.handle_exception_sockets(e_socks, rsh.sockets, rsh.clients)  
     except Exception as e:
-        mqtt_manager.stop_client()
+        rsh.mqtt_manager.stop_client()
         print("Transport hub exception: " + str(e))
         print("Rebooting hub...")
