@@ -3,19 +3,23 @@ import hub_files.bad_socket_handler
 import hub_files.hub_message_handler
 import network_management.network_pickler as np
 import hub_files.mqtt_manager
+import hub_files.remote_hub_monitor
 
 class ReadSocketHandler:
     def __init__ (self, server_socket):
         self.clients = {}
         self.server_socket = server_socket
         self.sockets = [server_socket]
-        self.bsh = hub_files.bad_socket_handler.BadSocketHandler(self.sockets, self.clients)
         self.mqtt_manager = hub_files.mqtt_manager.MqttManager()
+        self.rhm = hub_files.remote_hub_monitor.RemoteHubMonitor(self.clients, self.mqtt_manager)
+        self.bsh = hub_files.bad_socket_handler.BadSocketHandler(self.sockets, self.clients, self.rhm)
         self.hmh = hub_files.hub_message_handler.HubMessageHandler(self.clients, self.mqtt_manager)
         
     def handle_read_sockets(self, read_sockets):
+        #print("Preparing to handle read sockets")
         for notified_socket in read_sockets:
             self.handle_read_socket(notified_socket)
+        #print("Preparing to manage MQTT queue")
         self.mqtt_manager.manage_queued_messages()
 
     def handle_read_socket(self, notified_socket):

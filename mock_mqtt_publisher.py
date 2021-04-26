@@ -1,13 +1,15 @@
 import paho.mqtt.client as mqtt
 import time
+import random
 
 def on_message(client, obj, msg):
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
 
+client_name_suffix = random.randint(0,999999999)
 
 # set up client
 broker = "broker.hivemq.com"
-client = mqtt.Client("Mock_IoT_Phone_App_Publisher")
+client = mqtt.Client("Mock_IoT_Phone_App_Publisher" + str(client_name_suffix))
 client.connect(broker)
 
 # define topics

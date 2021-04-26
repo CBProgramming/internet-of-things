@@ -21,7 +21,8 @@ while True:
             r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, socket_timeout)
             rsh.handle_read_sockets(r_socks)
             if e_socks:
-                esh.handle_exception_sockets(e_socks, rsh.sockets, rsh.clients)  
+                esh.handle_exception_sockets(e_socks, rsh.sockets, rsh.clients, rsh.bsh)
+            #print("Inner while complete!")
     except Exception as e:
         try:
             rsh.mqtt_manager.stop_client()

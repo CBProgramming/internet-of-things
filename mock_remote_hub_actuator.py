@@ -1,7 +1,7 @@
 import time
 import network_management.socket_manager as sm
 
-username = "Mock Actuator 2"
+username = "remote_hub_actuator"
 client_socket = sm.get_socket()
 
 # register socket with transport layer
@@ -17,12 +17,12 @@ while not registered:
 while True:
     # receive result, which is a list in the format [result_code, message]
     result = sm.receive_message(client_socket)
+    
     result_code = result[0]
     # result code 'OK' indicates a message was successfully received
     if result_code == 'OK':
         message = result[1]
         print(message)
-
     # Other result codes you might want to handle for:
     # 'INVALID_HEADER'  (This would indicate there is something wrong with the
     #                    network_config or socket_manager scripts)

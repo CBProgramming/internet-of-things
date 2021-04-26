@@ -12,15 +12,18 @@ class MqttManager:
             return None
 
         def on_message(client, obj, msg):
+            #print("MQTT message added to queue")
             topic_payload = msg.topic
+            #print("Getting device")
             device = get_device(topic_payload)
+            #print ("Device: " + str(device))
             if device:
                 self.mqtt_queue.put([str(device),str(msg.payload)])
         
         self.mqtt_queue = queue.Queue()
         self.topic_head = "/petprotector/"
         broker = "broker.hivemq.com"
-        self.client = mqtt.Client("Pet_Protector_Home_Hub")
+        self.client = mqtt.Client("Pet_Protector_Home_Hub2")
         self.client.connect(broker)
         all_topics = self.topic_head + '#'
         self.client.subscribe(all_topics, 0)
@@ -32,8 +35,10 @@ class MqttManager:
             self.hmh.handle_mqtt_message(message)
 
     def manage_queued_messages(self):
+        #print("Managing queued messages")
         i = 0
         mqtt_messages = []
+        #print("MQTT queue size: " + str(self.mqtt_queue.qsize()))
         while i < self.mqtt_queue.qsize():
             mqtt_messages.append(self.mqtt_queue.get())
             i = i + 1
