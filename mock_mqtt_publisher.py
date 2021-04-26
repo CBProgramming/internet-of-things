@@ -13,8 +13,11 @@ client = mqtt.Client("Mock_IoT_Phone_App_Publisher" + str(client_name_suffix))
 client.connect(broker)
 
 # define topics
-camera_topic = "/petprotector/camera"
-speaker_topic = "/petprotector/speaker"
+camera_topic = "/petprotector/camera_actuator"
+speaker_topic = "/petprotector/speaker_actuator"
+microphone_topic = "/petprotector/microphone_actuator"
+feeder_topic = "/petprotector/feeder_actuator"
+remote_hub_topic = "/petprotector/remote_hub_actuator"
 gps_topic = "/petprotector/gps"
 mock_actuator_1_topic = "/petprotector/Mock Actuator 1"
 mock_actuator_2_topic = "/petprotector/Mock Actuator 2"
@@ -34,8 +37,11 @@ while True:
         message = 'OFF'
     client.publish(mock_actuator_1_topic, message + ' ' + str(count + 100))
     client.publish(mock_actuator_2_topic, message + ' ' + str(count + 200))
-    client.publish(speaker_topic, message)
     client.publish(camera_topic, message)
+    client.publish(speaker_topic, message)
+    client.publish(microphone_topic, message)
+    client.publish(feeder_topic, message)
+    client.publish(remote_hub_topic, message)
     print("count = " + str(count))
     count = count + 1
     time.sleep(1)

@@ -4,11 +4,11 @@ from EmulatorGUI import GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 
 
 
-username = "microphone"
+username = "microphone_actuator"
 client_socket = sm.get_socket()
 
 # register socket with transport layer
@@ -33,9 +33,9 @@ while True:
         print(message)
 
     if result_message == "b'ON'":
-        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(22, GPIO.HIGH)
     elif result_message == "b'OFF'":
-        GPIO.output(18, GPIO.LOW)
+        GPIO.output(22, GPIO.LOW)
 
         #GPIO.cleanup()
 

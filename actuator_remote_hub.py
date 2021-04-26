@@ -4,11 +4,11 @@ from EmulatorGUI import GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
 
 
 
-username = "feeder_actuator"
+username = "remote_hub_actuator"
 client_socket = sm.get_socket()
 
 # register socket with transport layer
@@ -33,9 +33,9 @@ while True:
         print(message)
 
     if result_message == "b'ON'":
-        GPIO.output(10, GPIO.HIGH)
+        GPIO.output(11, GPIO.HIGH)
     elif result_message == "b'OFF'":
-        GPIO.output(10, GPIO.LOW)
+        GPIO.output(11, GPIO.LOW)
 
         #GPIO.cleanup()
 
