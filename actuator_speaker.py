@@ -3,20 +3,10 @@ import network_management.socket_manager as sm
 from EmulatorGUI import GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-GPIO.setup(4, GPIO.OUT)
-#GPIO.setup(4, GPIO.OUT, initial=GPIO.LOW)
 
-#GPIO.setup(4, GPIO.OUT)
-#GPIO.setup(17, GPIO.OUT, initial=GPIO.LOW)
-#GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
-#GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW)
-#GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-#GPIO.setup(15, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-#GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-#GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW)
 
-
-username = "camera"
+username = "speaker"
 client_socket = sm.get_socket()
 
 # register socket with transport layer
@@ -41,9 +31,9 @@ while True:
         print(message)
 
     if result_message == "b'ON'":
-        GPIO.output(4, GPIO.HIGH)
+        GPIO.output(21, GPIO.HIGH)
     elif result_message == "b'OFF'":
-        GPIO.output(4, GPIO.LOW)
+        GPIO.output(21, GPIO.LOW)
 
         #GPIO.cleanup()
 
