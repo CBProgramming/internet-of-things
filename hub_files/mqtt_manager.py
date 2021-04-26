@@ -1,4 +1,4 @@
-import queue
+import queue, random
 import paho.mqtt.client as mqtt
 
 class MqttManager:
@@ -19,11 +19,12 @@ class MqttManager:
             #print ("Device: " + str(device))
             if device:
                 self.mqtt_queue.put([str(device),str(msg.payload)])
-        
+
+        client_name_suffix = random.randint(0,999999999)
         self.mqtt_queue = queue.Queue()
         self.topic_head = "/petprotector/"
         broker = "broker.hivemq.com"
-        self.client = mqtt.Client("Pet_Protector_Home_Hub2")
+        self.client = mqtt.Client("Pet_Protector_Home_Hub2" + str(client_name_suffix))
         self.client.connect(broker)
         all_topics = self.topic_head + '#'
         self.client.subscribe(all_topics, 0)

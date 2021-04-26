@@ -23,6 +23,8 @@ while True:
     if result_code == 'OK':
         message = result[1]
         print(message)
+        #turn on remote hub
+        
     # Other result codes you might want to handle for:
     # 'INVALID_HEADER'  (This would indicate there is something wrong with the
     #                    network_config or socket_manager scripts)
