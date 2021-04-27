@@ -32,11 +32,15 @@ while True:
         message = result[1]
         print(message)
 
-    if result_message == "b'ON'":
-        GPIO.output(17, GPIO.HIGH)
-    elif result_message == "b'OFF'":
-        GPIO.output(17, GPIO.LOW)
-
+        if result_message == "b'ON'":
+            GPIO.output(17, GPIO.HIGH)
+        elif result_message == "b'OFF'":
+            GPIO.output(17, GPIO.LOW)
+    elif result_code == 'ERROR':
+        None
+        
+        
+        
         #GPIO.cleanup()
 
            
