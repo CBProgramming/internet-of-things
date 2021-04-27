@@ -30,7 +30,7 @@ while True:
     print("Sending message: " + str(message))
     count = count + 1
     
-    # attempt to send message, variable 'success' stores a boolean
+    # attempt to send message, variable 'result' stores a boolean
     # value indicating if message sending was successful
     result = sm.send_message(message)
 
