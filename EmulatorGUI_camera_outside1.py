@@ -29,7 +29,7 @@ class App(threading.Thread):
 
     def run(self):
         self.root = tk.Tk()
-        self.root.wm_title("GPIO EMULATOR")
+        self.root.wm_title("GPIO EMULATOR - CAMERA OUTSIDE1 ACTUATOR")
         self.root.protocol("WM_DELETE_WINDOW", self.callback)
 
 
@@ -61,7 +61,7 @@ class App(threading.Thread):
 
         
         #GPIO18
-        pin12btn = Button(text="GPIO18\nOUT=0", command="18",  padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin12btn = Button(text="CAMERA-18\nOUTSIDE1", command="18",  padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin12btn.grid(row=0, column=5, padx=(10, 10))
 
         dictionaryPinsTkinter["18"] = pin12btn
@@ -315,7 +315,7 @@ def drawGPIOOut(gpioID):
     
 
     if(objPin.SetMode == "OUT"):
-        objBtn["text"] = "GPIO" + str(gpioID) + "\nOUT=" + str(objPin.Out)
+        #objBtn["text"] = "GPIO" + str(gpioID) + "\nOUT=" + str(objPin.Out)
         if(str(objPin.Out) == "1"):
             objBtn.configure(background='tan2')
             objBtn.configure(activebackground='tan2')

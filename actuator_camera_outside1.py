@@ -1,21 +1,21 @@
 import time
 import network_management.socket_manager 
-from EmulatorGUI_feeder import GPIO
+from EmulatorGUI_camera_outside1 import GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
 
 
 
-username_feeder = "feeder_actuator"
-feeder_socket = network_management.socket_manager.SocketManager()
+username_camera_outside1 = "camera_outside1_actuator"
+camera_outside1_socket = network_management.socket_manager.SocketManager()
 
 # register socket with transport layer
 status = 'OFFLINE'
 while status == 'OFFLINE':
     print("Attempting to register")
-    status = feeder_socket.connect(username_feeder)
+    status = camera_outside1_socket.connect(username_camera_outside1)
     print(status)
     if status == 'OFFLINE':  ## sm tries five times on both hubs
                              ## before returning an 'OFFLINE' result
@@ -25,7 +25,7 @@ while status == 'OFFLINE':
 #messaging loop
 while True:
     # receive result, which is a list in the format [result_code, message]
-    result = feeder_socket.receive_message()
+    result = camera_outside1_socket.receive_message()
     
     result_code = result[0]
     result_message = result[1]
@@ -35,11 +35,11 @@ while True:
         print(message)
 
     if result_message == "b'ON'":
-        GPIO.output(10, GPIO.HIGH)
-        result = feeder_socket.send_message('OK ON')
+        GPIO.output(18, GPIO.HIGH)
+        result = camera_outside1_socket.send_message('OK ON')
     elif result_message == "b'OFF'":
-        GPIO.output(10, GPIO.LOW)
-        result = feeder_socket.send_message('OK OFF')
+        GPIO.output(18, GPIO.LOW)
+        result = camera_outside1_socket.send_message('OK OFF')
 
         #GPIO.cleanup()
 

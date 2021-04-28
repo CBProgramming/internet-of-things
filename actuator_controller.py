@@ -1,29 +1,29 @@
 import time
 import network_management.socket_manager 
-from EmulatorGUI import GPIO
+from EmulatorGUI_controller import GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
+#GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(17, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(27, GPIO.OUT, initial=GPIO.LOW)
 
-username_feeder = "feeder_actuator"
+#username_feeder = "feeder_actuator"
 username_remote_hub = "remote_hub_actuator"
 username_camera = "camera_actuator"
 username_microphone = "microphone_actuator"
 username_speaker = "speaker_actuator"
 #sm = network_management.socket_manager.SocketManager()
-feeder_socket = network_management.socket_manager.SocketManager()
+#feeder_socket = network_management.socket_manager.SocketManager()
 remote_hub_socket = network_management.socket_manager.SocketManager()
 camera_socket = network_management.socket_manager.SocketManager()
 microphone_socket = network_management.socket_manager.SocketManager()
 speaker_socket = network_management.socket_manager.SocketManager()
 
 # register socket with transport layer
-status = 'OFFLINE'
+"""status = 'OFFLINE'
 while status == 'OFFLINE':
     print("Attempting to register")
     status = feeder_socket.connect(username_feeder)
@@ -31,7 +31,7 @@ while status == 'OFFLINE':
     if status == 'OFFLINE':  ## sm tries five times on both hubs
                              ## before returning an 'OFFLINE' result
         print("Registration attempt failed")
-        time.sleep(1)
+        time.sleep(1)"""
 
 status = 'OFFLINE'
 while status == 'OFFLINE':
@@ -89,7 +89,7 @@ while status == 'OFFLINE':
 while True:
 
     # receive result, which is a list in the format [result_code, message]
-    result = feeder_socket.receive_message()
+    """result = feeder_socket.receive_message()
     
     result_code = result[0]
     result_message = result[1]
@@ -105,7 +105,7 @@ while True:
             GPIO.output(10, GPIO.LOW)
             result = feeder_socket.send_message('OK OFF')            
     elif result_code == 'SOCKET_EXEPTION':
-        None
+        None"""
     
     # receive result, which is a list in the format [result_code, message]
     result = remote_hub_socket.receive_message()
