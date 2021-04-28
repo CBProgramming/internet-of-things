@@ -3,8 +3,9 @@ import random
 
 # Change test_topic to test a specific topi
 # "/petprotector/" is appended to front accordingly
-test_topic = '#'
+#test_topic = 'feeder_actuator'
 #test_topic = "Mock Sensor 1"
+test_topic = '#'  # subscribe to all
 
 def on_message(client, obj, msg):
     print(str(msg.topic))

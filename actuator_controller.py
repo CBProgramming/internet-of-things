@@ -119,10 +119,10 @@ while True:
 
         if result_message == "b'ON'":
             GPIO.output(11, GPIO.HIGH)
-            result = remote_hub_socket.send_message('OK ON')
+            #result = remote_hub_socket.send_message('OK ON')
         elif result_message == "b'OFF'":
             GPIO.output(11, GPIO.LOW)
-            result = remote_hub_socket.send_message('OK OFF')            
+            #result = remote_hub_socket.send_message('OK OFF')            
     elif result_code == 'SOCKET_EXEPTION':
         None
 

@@ -35,8 +35,8 @@ while True:
         message = 'ON'
     else:
         message = 'OFF'
-    client.publish(mock_actuator_1_topic, message + ' ' + str(count + 100))
-    client.publish(mock_actuator_2_topic, message + ' ' + str(count + 200))
+    #client.publish(mock_actuator_1_topic, message + ' ' + str(count + 100))
+    #client.publish(mock_actuator_2_topic, message + ' ' + str(count + 200))
     client.publish(camera_topic, message)
     client.publish(speaker_topic, message)
     client.publish(microphone_topic, message)

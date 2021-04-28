@@ -6,7 +6,7 @@ import hub_files.hub_exception_socket_handler as esh
 import hub_files.hub_message_handler
 
 
-socket_timeout = 1
+socket_timeout = 0.25
 
 while True:
     try:
