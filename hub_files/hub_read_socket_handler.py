@@ -8,7 +8,8 @@ import hub_files.gps_range_calculator as grc
 import mock_config.default_variables as dv
 
 class ReadSocketHandler:
-    def __init__ (self, server_socket):
+    def __init__ (self, server_socket, hub_type):
+        self.hub_type = hub_type
         self.in_range = True
         self.clients = {}
         self.server_socket = server_socket
@@ -16,7 +17,7 @@ class ReadSocketHandler:
         self.mqtt_manager = hub_files.mqtt_manager.MqttManager()
         self.rhm = hub_files.remote_hub_monitor.RemoteHubMonitor(self.clients, self.mqtt_manager)
         self.bsh = hub_files.bad_socket_handler.BadSocketHandler(self.sockets, self.clients, self.rhm)
-        self.hmh = hub_files.hub_message_handler.HubMessageHandler(self.clients, self.mqtt_manager)
+        self.hmh = hub_files.hub_message_handler.HubMessageHandler(self.clients, self.mqtt_manager, self)
         
         
     def handle_read_sockets(self, read_sockets):
@@ -33,7 +34,7 @@ class ReadSocketHandler:
             self.handle_message_received(notified_socket)
 
     def handle_new_connection(self):
-        if self.in_range:
+        if self.in_range or self.hub_type == 'remote':
             client_socket, client_address = self.server_socket.accept()
             user = self.receive_message(client_socket)
             if user[0] == 'OK':
@@ -57,11 +58,16 @@ class ReadSocketHandler:
             if sender == 'gps_sensor':
                 collar_range = grc.translate_gps(message[1])
                 print("Collar range = " + str(collar_range))
-                if collar_range == "AT BOUNDARY":
-                    self.hmh.handle_mqtt_message(['remote_hub_actuator','ON'])
-                if collar_range == 'EXCEEDED RANGE':
-                    self.in_range = False
-                    self.remove_ranged_devices()
+                if self.hub_type == 'home':
+                    if collar_range == "AT BOUNDARY":
+                        self.hmh.handle_mqtt_message(['remote_hub_actuator','ON'])
+                    if collar_range == 'EXCEEDED RANGE':
+                        self.in_range = False
+                        self.remove_ranged_devices()
+                elif self.hub_type == 'remote':
+                    if collar_range == "OK":
+                        self.hmh.handle_mqtt_message(['remote_hub_actuator','OFF'])
+
 
     def remove_ranged_devices(self):
         print("Removing ranged devices")

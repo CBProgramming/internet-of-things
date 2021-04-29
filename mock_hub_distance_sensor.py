@@ -32,8 +32,21 @@ while True:
         message = ("EXCEEDED RANGE")
     elif count < 20:
         message = ("AT BOUNDARY")
+    elif count < 30:
+        message = ("OK")
+    elif count < 35:
+        message = ("AT BOUNDARY")
+    elif count < 40:
+        message = ("EXCEEDED RANGE")
+    elif count < 45:
+        message = ("AT BOUNDARY")
     else:
         message = ("OK")
+
+
+
+
+        
     #message = [1, 'string', ['list', 0]]
     print("Sending message: " + str(message))
     count = count + 1

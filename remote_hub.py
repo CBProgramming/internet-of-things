@@ -8,15 +8,18 @@ import hub_files.hub_message_handler
 
 socket_timeout = 0.25
 
+print("Booting up remote hub...")
+
 while True:
+    
     try:
-        port = nc.get_port()
+        port = nc.get_remote_port()
         ip_address = nc.get_ip()
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind((ip_address, port))
         server_socket.listen()
-        rsh = hrsh.ReadSocketHandler(server_socket, 'home')
+        rsh = hrsh.ReadSocketHandler(server_socket, 'remote')
         while True:
             r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, socket_timeout)
             rsh.handle_read_sockets(r_socks)

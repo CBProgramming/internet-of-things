@@ -41,14 +41,15 @@ while True:
                 print(message)
                 if message == 'ON' and not remote_on:
                     try:
-                        #remote_hub_process = subprocess.Popen(['python','remote_hub.py'])
+                        remote_hub_process = subprocess.Popen(['python','remote_hub.py'])
                         remote_on = True
                     except Exception as e:
                         print("Exception when turning on remote hub: " + str(e))
                 elif message == 'OFF':
                     try:
-                        #remote_hub_process.terminate()
+                        remote_hub_process.terminate()
                         remote_on = False
+                        inner_while = False
                     except Exception as e:
                         print("Exception when turning off remote hub: " + str(e))
             if result_code == 'SOCKET_EXCEPTION':
