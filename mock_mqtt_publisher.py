@@ -23,7 +23,8 @@ camera_outside2_topic = "/petprotector/camera_outside2_actuator"
 gps_topic = "/petprotector/gps"
 mock_actuator_1_topic = "/petprotector/Mock Actuator 1"
 mock_actuator_2_topic = "/petprotector/Mock Actuator 2"
-
+feeding_time_topic = "/petprotector/feeder_actuator/feeding_times"
+meal_size_topic = "/petprotector/feeder_actuator/meal_size"
 #subscribe to topics and start subscription loop
 client.subscribe(gps_topic, 0)
 client.on_message = on_message
@@ -42,10 +43,15 @@ while True:
     client.publish(camera_topic, message)
     client.publish(speaker_topic, message)
     client.publish(microphone_topic, message)
-    client.publish(feeder_topic, message)
+    #client.publish(feeder_topic, message)
     client.publish(remote_hub_topic, message)
     client.publish(camera_outside1_topic, message)
     client.publish(camera_outside2_topic, message)
+    if count == 15:
+        #client.publish(feeding_time_topic, "13:00")
+        #client.publish(meal_size_topic, "200")
+        client.publish(feeder_topic, "14:44")
+        client.publish(feeder_topic, "300")
     print("count = " + str(count))
     count = count + 1
     time.sleep(1)
