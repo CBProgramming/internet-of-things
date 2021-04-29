@@ -57,7 +57,7 @@ class ReadSocketHandler:
             self.hmh.handle_network_message(notified_socket, message[1])
             if sender == 'gps_sensor':
                 collar_range = grc.translate_gps(message[1])
-                print("Collar range = " + str(collar_range))
+                #print("Collar range = " + str(collar_range))
                 if self.hub_type == 'home':
                     if collar_range == "AT BOUNDARY":
                         self.hmh.handle_mqtt_message(['remote_hub_actuator','ON'])
@@ -70,14 +70,10 @@ class ReadSocketHandler:
 
 
     def remove_ranged_devices(self):
-        print("Removing ranged devices")
+        #print("Removing ranged devices")
         sockets_to_remove = []
         for username in dv.ranged_devices:
             for key, value in self.clients.items():
-                #print("Key:")
-                #print(key)
-                #print("Value:")
-                #print(value)
                 if username == value:
                     sockets_to_remove.append(key)
         for _socket in sockets_to_remove:
@@ -85,7 +81,7 @@ class ReadSocketHandler:
             del self.clients[_socket]
             _socket.shutdown(socket.SHUT_RDWR)
         sockets_to_remove = None
-        print("Finished removing ranged devices")
+        #print("Finished removing ranged devices")
 
     def receive_message(self, client_socket):
         message = np.unpickle_message(client_socket)

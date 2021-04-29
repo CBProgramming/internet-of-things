@@ -1,4 +1,9 @@
 import time, network_management.socket_manager
+import mock_config.default_variables as dv
+
+start_lat = dv.mock_latitude
+start_long = dv.mock_longitude
+one_foot = 0.018/5280
 
 username = "gps_sensor"
 sm = network_management.socket_manager.SocketManager()
@@ -20,28 +25,11 @@ while status == 'OFFLINE':
 
 #messaging loop
 count = 1
+new_long = start_long
 while True:
     time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
-    
-    # set up dummy message
-    if count < 5:
-        message = ("OK")
-    elif count < 10:
-        message = ("AT BOUNDARY")
-    elif count < 15:
-        message = ("EXCEEDED RANGE")
-    elif count < 20:
-        message = ("AT BOUNDARY")
-    elif count < 30:
-        message = ("OK")
-    elif count < 35:
-        message = ("AT BOUNDARY")
-    elif count < 40:
-        message = ("EXCEEDED RANGE")
-    elif count < 45:
-        message = ("AT BOUNDARY")
-    else:
-        message = ("OK")
+    new_long = new_long + one_foot * 3
+    message = [start_lat, new_long]
 
     #message = [1, 'string', ['list', 0]]
     print("Sending message: " + str(message))
@@ -49,6 +37,6 @@ while True:
     # attempt to send message, variable 'success' stores a boolean
     # value indicating if message sending was successful
     if sm:
-        print("attempting sending")
+        #print("attempting sending")
         success = sm.send_message(message)
-        print("success var = " + str(success))
+        #print("success var = " + str(success))

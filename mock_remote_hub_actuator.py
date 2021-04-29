@@ -13,9 +13,9 @@ while True:
     sm = network_management.socket_manager.SocketManager()
     status = 'OFFLINE'
     while status == 'OFFLINE':
-        print("Attempting to register")
+        #print("Attempting to register")
         status = sm.connect(username)
-        print(status)
+        #print(status)
         if status == 'OFFLINE':  ## sm tries five times on both hubs
                                  ## before returning an 'OFFLINE' result
             print("Registration attempt failed")
@@ -24,7 +24,7 @@ while True:
             # spams the network every second
             # probably want to wait an incrementing amount of time before
             # trying sm.connect again
-    print("While over")
+    #print("While over")
     #messaging loop
     inner_while = True
     while inner_while:
@@ -33,20 +33,24 @@ while True:
         #print(result)
         if result:
             result_code = result[0]
-            if result_code != 'ERROR':
-                print("Result code: " + str(result_code))
+            #if result_code != 'ERROR':
+                #print("Result code: " + str(result_code))
             # result code 'OK' indicates a message was successfully received
             if result_code == 'OK':
                 message = result[1]
-                print(message)
+                #print(message)
                 if message == 'ON' and not remote_on:
                     try:
+                        print("Going out of range of home hub...")
+                        print("Turning on remote hub...")
                         remote_hub_process = subprocess.Popen(['python','remote_hub.py'])
                         remote_on = True
                     except Exception as e:
                         print("Exception when turning on remote hub: " + str(e))
                 elif message == 'OFF':
                     try:
+                        print("Pet has returned home")
+                        print("Switching off remote hub...")
                         remote_hub_process.terminate()
                         remote_on = False
                         inner_while = False
@@ -55,11 +59,11 @@ while True:
             if result_code == 'SOCKET_EXCEPTION':
                 inner_while = False
         else:
-            print("Result == None")
-            print(result)
+            #print("Result == None")
+            #print(result)
             inner_while = False
     if sm.socket:
-        print("Closing socket")
+        #print("Closing socket")
         sm.socket.shutdown(socket.SHUT_RDWR)
             # Other result codes you might want to handle for:
             # 'INVALID_HEADER'  (This would indicate there is something wrong with the

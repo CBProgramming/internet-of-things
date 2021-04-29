@@ -30,15 +30,15 @@ class HubMessageHandler():
             
 
     def handle_mqtt_message(self, message):
-        print("HUB_MESSAGE_HANDLER - MQTT message received: " + str(message[1]))
+        #print("HUB_MESSAGE_HANDLER - MQTT message received: " + str(message[1]))
         message_key = message[0]
         data = message[1]
         if message_key == 'gps_sensor':
             string_data = str(data)
             string_data = string_data[3:-2]
-            print("String Data: " + string_data)
+            #print("String Data: " + string_data)
             result = grc.translate_gps(string_data)
-            print("Result: " + str(result))
+            #print("Result: " + str(result))
             if result == 'OK':
                 if self.rsh.in_range == False:
                     self.rsh.in_range = True

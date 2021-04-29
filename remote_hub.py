@@ -8,7 +8,7 @@ import hub_files.hub_message_handler
 
 socket_timeout = 0.25
 
-print("Booting up remote hub...")
+print("Initialising remote hub...")
 
 while True:
     

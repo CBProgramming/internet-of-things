@@ -30,9 +30,13 @@ class SocketManager:
         while attempts < self.connect_attempts:
             self.socket = self.get_socket()
             success = self.register()
+            if success:
+                print("Connected to home hub")
             if not success:
                 self.socket = self.get_remote_socket()
                 success = self.register()
+                if success:
+                    print("Connected to remote hub")
             if success:
                 return self.online
             else:
@@ -61,12 +65,12 @@ class SocketManager:
             bytes_sent = self.socket.send(pickled_message)
             time.sleep(0.4)
             response = self.internal_receive_message()
-            print(response)
+            #print(response)
             if response[0] == 'OK' and response[1] == 'welcome':
-                print("Welcome to the server")
+                #print("Successfully registered with server")
                 return True
             else:
-                print("Unable to connect to the server")
+                #print("Unable to connect to the server")
                 return False
         except Exception as e:
             print("Socket manager registration exception: " + str(e))

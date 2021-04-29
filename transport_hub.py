@@ -8,6 +8,8 @@ import hub_files.hub_message_handler
 
 socket_timeout = 0.25
 
+print("Initialising home hub...")
+
 while True:
     try:
         port = nc.get_port()
