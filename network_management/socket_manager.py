@@ -1,4 +1,4 @@
-import socket, errno
+import socket, errno, time
 import network_management.network_config as nc
 import network_management.network_pickler as np
 
@@ -58,8 +58,16 @@ class SocketManager:
     def register(self):
         try:
             pickled_message = np.pickle_message(self.username)
-            self.socket.send(pickled_message)
-            return True
+            bytes_sent = self.socket.send(pickled_message)
+            time.sleep(0.4)
+            response = self.internal_receive_message()
+            print(response)
+            if response[0] == 'OK' and response[1] == 'welcome':
+                print("Welcome to the server")
+                return True
+            else:
+                print("Unable to connect to the server")
+                return False
         except Exception as e:
             print("Socket manager registration exception: " + str(e))
             return False

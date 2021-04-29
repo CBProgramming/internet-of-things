@@ -37,9 +37,14 @@ class ReadSocketHandler:
             client_socket, client_address = self.server_socket.accept()
             user = self.receive_message(client_socket)
             if user[0] == 'OK':
+                pickled_message = np.pickle_message('welcome')
+                client_socket.send(pickled_message)
                 self.sockets.append(client_socket)
                 self.clients[client_socket] = user[1]
                 print(f"Accepted new connection from device: {user[1]}")
+        else:
+            #print("New connection attempted but out of range")
+            None
 
     def handle_message_received(self, notified_socket):
         message = self.receive_message(notified_socket)
@@ -52,6 +57,8 @@ class ReadSocketHandler:
             if sender == 'gps_sensor':
                 collar_range = grc.translate_gps(message[1])
                 print("Collar range = " + str(collar_range))
+                if collar_range == "AT BOUNDARY":
+                    self.hmh.handle_mqtt_message(['remote_hub_actuator','ON'])
                 if collar_range == 'EXCEEDED RANGE':
                     self.in_range = False
                     self.remove_ranged_devices()
@@ -67,9 +74,10 @@ class ReadSocketHandler:
                 #print(value)
                 if username == value:
                     sockets_to_remove.append(key)
-        for socket in sockets_to_remove:
-            self.sockets.remove(socket)
-            del self.clients[socket]
+        for _socket in sockets_to_remove:
+            self.sockets.remove(_socket)
+            del self.clients[_socket]
+            _socket.shutdown(socket.SHUT_RDWR)
         sockets_to_remove = None
         print("Finished removing ranged devices")
 

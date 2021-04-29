@@ -14,7 +14,7 @@ def unpickle_message(client_socket):
         message_header = client_socket.recv(header_length)
         # handle no data received
         if not len(message_header):
-            return False
+            return ['INVALID_HEADER','']
         # handle received data
         else:
             message_length = int(message_header.decode("utf-8").strip())

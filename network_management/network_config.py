@@ -7,6 +7,9 @@ header_length = 10
 def get_port():
     return port
 
+def get_remote_port():
+    return remote_port
+
 def get_header_length():
     return header_length
 
