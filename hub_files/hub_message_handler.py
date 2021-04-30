@@ -32,6 +32,7 @@ class HubMessageHandler():
     def handle_mqtt_message(self, message):
         #print("HUB_MESSAGE_HANDLER - MQTT message received: " + str(message[1]))
         message_key = message[0]
+        #print("Message key is: " + message_key)
         data = message[1]
         if message_key == 'gps_sensor':
             string_data = str(data)
@@ -42,12 +43,21 @@ class HubMessageHandler():
             if result == 'OK':
                 if self.rsh.in_range == False:
                     self.rsh.in_range = True
-        #print("Handling MQTT message: " + str(data))
+        print("Handling MQTT message: " + str(data))
         for key, value in self.clients.items():
-            if message_key == value:
-                #print("Sending on key: " + str(message_key))
+            if message_key == value or self.is_message_for_feeder(message_key, value):
+                print("Sending on key: " + str(message_key))
                 pickled_message = np.pickle_message(data)
                 key.send(pickled_message)
+
+    def is_message_for_feeder(self, message_key, value):
+        if value == 'feeder_actuator':
+            if (message_key == 'feeder_actuator/feeding_times' or
+                message_key == 'feeder_actuator/meal_size' or
+                message_key == 'feeder_actuator'):
+                return True
+        return False
+        
                 
         #print("Finished handling MQTT messages")
 
