@@ -50,7 +50,7 @@ while True:
     if count == 15:
         #client.publish(feeding_time_topic, "13:00")
         #client.publish(meal_size_topic, "200")
-        client.publish(feeding_time_topic, "12:05")
+        client.publish(feeding_time_topic, "13:14")
         client.publish(meal_size_topic, "300")
     print("count = " + str(count))
     count = count + 1
