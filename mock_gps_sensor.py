@@ -28,7 +28,12 @@ count = 1
 new_long = start_long
 while True:
     time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
-    new_long = new_long + one_foot * 3
+    if count < 15:
+        new_long = new_long + one_foot * 3
+    elif count <30:
+        new_long = new_long - one_foot * 3
+    else:
+        new_long = new_long + one_foot * 3
     message = [start_lat, new_long]
 
     #message = [1, 'string', ['list', 0]]
