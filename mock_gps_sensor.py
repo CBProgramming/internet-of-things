@@ -4,6 +4,7 @@ import mock_config.default_variables as dv
 start_lat = dv.mock_latitude
 start_long = dv.mock_longitude
 one_foot = 0.018/5280
+speed = 3
 
 username = "gps_sensor"
 sm = network_management.socket_manager.SocketManager()
@@ -29,13 +30,15 @@ new_long = start_long
 while True:
     time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
     if count < 15:
-        new_long = new_long + one_foot * 3
+        new_long = new_long + one_foot * speed
     elif count <30:
-        new_long = new_long - one_foot * 3
+        new_long = new_long - one_foot * speed
+    elif count <45:
+        new_long = new_long + one_foot * speed
     else:
-        new_long = new_long + one_foot * 3
+        new_long = new_long - one_foot * speed
+    
     message = [start_lat, new_long]
-
     #message = [1, 'string', ['list', 0]]
     print("Sending message: " + str(message))
     count = count + 1

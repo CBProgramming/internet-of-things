@@ -44,9 +44,9 @@ while True:
     client.publish(speaker_topic, message)
     client.publish(microphone_topic, message)
     #client.publish(feeder_topic, message)
-    client.publish(remote_hub_topic, message)
-    client.publish(camera_outside1_topic, message)
-    client.publish(camera_outside2_topic, message)
+    #client.publish(remote_hub_topic, message)
+    #client.publish(camera_outside1_topic, message)
+    #client.publish(camera_outside2_topic, message)
     if count == 15:
         #client.publish(feeding_time_topic, "13:00")
         #client.publish(meal_size_topic, "200")

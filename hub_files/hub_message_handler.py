@@ -53,10 +53,10 @@ class HubMessageHandler():
                     if value == "camera_outside1_actuator" or value == "camera_outside2_actuator":
                         pickled_message = np.pickle_message("b'OFF'")
                         key.send(pickled_message)
-        print("Handling MQTT message: " + str(data))
+        #print("Handling MQTT message: " + str(data))
         for key, value in self.clients.items():
             if message_key == value or self.is_message_for_feeder(message_key, value):
-                print("Sending on key: " + str(message_key))
+                #print("Sending on key: " + str(message_key))
                 pickled_message = np.pickle_message(data)
                 key.send(pickled_message)
             

@@ -50,11 +50,17 @@ class ReadSocketHandler:
     def handle_message_received(self, notified_socket):
         message = self.receive_message(notified_socket)
         if not message or message[0] == 'ERROR':
-            print(f"Closed connection from device: {self.clients[notified_socket]}")
+            print(f"HRH: Closed connection from device: {self.clients[notified_socket]}")
+            notified_socket.shutdown(socket.SHUT_RDWR)
             self.bsh.remove_client_socket(notified_socket)
         elif message[0] != 'NO_MESSAGES':
             sender = self.clients[notified_socket]
-            self.hmh.handle_network_message(notified_socket, message[1])
+            #print("Message: " + str(message[1]))
+            if message[1] == "let me in":
+                #print("Permission requested")
+                None
+            else:
+                self.hmh.handle_network_message(notified_socket, message[1])
             if sender == 'gps_sensor':
                 collar_range = grc.translate_gps(message[1])
                 #print("Collar range = " + str(collar_range))
