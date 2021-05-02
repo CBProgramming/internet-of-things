@@ -18,19 +18,19 @@ class RemoteHubMonitor():
         for client, name in self.clients.items():
             #print("Name: " + name)
             if name == 'remote_hub_actuator':
-                print("ATTEMPTING TO MESSAGE REMOTE HUB")
+                #print("ATTEMPTING TO MESSAGE REMOTE HUB")
                 pickled_message = np.pickle_message(actuator_message)
                 client.send(pickled_message)
                 self.mqtt_manager.publish_message(name, json.dumps(mqtt_message))
 
     def determine_network_health(self, message):
         if message == "OK":
-            print("Message == OK State")
+            #print("Message == OK State")
             if self.current_state != self.ok_state:  #need to receive message to indicate hub is now off
                 self.message_remote_hub(self.off_message, self.pet_returned)
             # Turn off remote hub
         if message == "AT BOUNDARY":
-            print("Message == at boundary")
+            #print("Message == at boundary")
             remote_hub_on = False
             for client, name in self.clients.items():
                 if name == 'remote_hub':

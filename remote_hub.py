@@ -8,17 +8,18 @@ import hub_files.hub_message_handler
 
 s_timeout = nc.socket_timeout
 
-print("Initialising home hub...")
+print("Initialising remote hub...")
 
 while True:
+    
     try:
-        port = nc.get_port()
+        port = nc.get_remote_port()
         ip_address = nc.get_ip()
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind((ip_address, port))
         server_socket.listen()
-        rsh = hrsh.ReadSocketHandler(server_socket, 'home')
+        rsh = hrsh.ReadSocketHandler(server_socket, 'remote')
         print("Listening for new devices...")
         while True:
             r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, s_timeout)
@@ -31,5 +32,5 @@ while True:
             rsh.mqtt_manager.stop_client()
         except:
             None
-        print("Home hub exception: " + str(e))
+        print("Remote hub exception: " + str(e))
         print("Rebooting...")

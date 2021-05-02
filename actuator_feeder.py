@@ -1,6 +1,7 @@
 import time
-import network_management.socket_manager as sm
-from EmulatorGUI import GPIO
+import network_management.socket_manager 
+from EmulatorGUI_feeder import GPIO
+#import feeder_actuator_clock 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -8,25 +9,31 @@ GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
 
 
 
-username = "feeder_actuator"
-client_socket = sm.get_socket()
+username_feeder = "feeder_actuator"
+feeder_socket = network_management.socket_manager.SocketManager()
+
+
 
 # register socket with transport layer
-registered = False
-while not registered:
-    registered = sm.register(username, client_socket)
-    if not registered:
+status = 'OFFLINE'
+while status == 'OFFLINE':
+    print("Attempting to register")
+    status = feeder_socket.connect(username_feeder)
+    print(status)
+    if status == 'OFFLINE':  ## sm tries five times on both hubs
+                             ## before returning an 'OFFLINE' result
         print("Registration attempt failed")
-        time.sleep(1) # this might need better handling as currently it just
-                      # spams the network every second
+        time.sleep(1)
 
 #messaging loop
 while True:
     # receive result, which is a list in the format [result_code, message]
-    result = sm.receive_message(client_socket)
-    
+    result = feeder_socket.receive_message()
+    #print(result)
     result_code = result[0]
     result_message = result[1]
+    current_time = time.strftime("b'" + "%H:%M" + "'")
+    
     # result code 'OK' indicates a message was successfully received
     if result_code == 'OK':
         message = result[1]
@@ -34,12 +41,69 @@ while True:
 
     if result_message == "b'ON'":
         GPIO.output(10, GPIO.HIGH)
+        print("Dispensing food")
+        result = feeder_socket.send_message('OK ON')
     elif result_message == "b'OFF'":
+        print("Food dispensed")
         GPIO.output(10, GPIO.LOW)
+        result = feeder_socket.send_message('OK OFF')
+    else:
+        if result_code == 'OK':
+            message = result_message
+            if ":" in message:
+                feed_time = message
+                result = feeder_socket.send_message('TIMER SET')
+                #print("the time is " + current_time)
+                print("Feed time set " + feed_time)
+            else:
+                food_amount = message
+                result = feeder_socket.send_message('SIZE SET')
+                print("Food weight set " + food_amount)
+
+                if (current_time == feed_time):
+                    GPIO.output(10, GPIO.HIGH)
+                    print("Feeding time " + feed_time)
+                    print("Dispensing food")
+                    result = feeder_socket.send_message('FEEDING')
+                    time.sleep(10)
+                    print("Food dispensed")
+                    GPIO.output(10, GPIO.LOW)
+                    
+                else:
+                    while True:
+                        current_time != feed_time
+                        #print(current_time)
+                        #print(feed_time)
+                        time.sleep(1)
+                        current_time = time.strftime("b'" + "%H:%M" + "'")
+                        if (current_time != feed_time):
+                            None
+                            #print(current_time)
+                            #print(feed_time)
+                            #print("not time yet")
+                        
+                        else:
+                            GPIO.output(10, GPIO.HIGH)
+                            result = feeder_socket.send_message('FEEDING')
+                            print("Feeding time " + feed_time)
+                            print("Dispensing food")
+                            time.sleep(10)
+                            print("Food dispensed")
+                            GPIO.output(10, GPIO.LOW)
+                        
+                            break
+
+    
+                    
+                    
+                        
+                    
+
+                    
 
         #GPIO.cleanup()
 
-           
+#clock()           
          
        
 

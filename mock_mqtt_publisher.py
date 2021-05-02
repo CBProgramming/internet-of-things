@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import random
+import datetime as dt
 
 def on_message(client, obj, msg):
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
@@ -18,10 +19,13 @@ speaker_topic = "/petprotector/speaker_actuator"
 microphone_topic = "/petprotector/microphone_actuator"
 feeder_topic = "/petprotector/feeder_actuator"
 remote_hub_topic = "/petprotector/remote_hub_actuator"
+camera_outside1_topic = "/petprotector/camera_outside1_actuator"
+camera_outside2_topic = "/petprotector/camera_outside2_actuator"
 gps_topic = "/petprotector/gps"
 mock_actuator_1_topic = "/petprotector/Mock Actuator 1"
 mock_actuator_2_topic = "/petprotector/Mock Actuator 2"
-
+feeding_time_topic = "/petprotector/feeder_actuator/feeding_times"
+meal_size_topic = "/petprotector/feeder_actuator/meal_size"
 #subscribe to topics and start subscription loop
 client.subscribe(gps_topic, 0)
 client.on_message = on_message
@@ -40,8 +44,15 @@ while True:
     client.publish(camera_topic, message)
     client.publish(speaker_topic, message)
     client.publish(microphone_topic, message)
-    client.publish(feeder_topic, message)
-    client.publish(remote_hub_topic, message)
+    #client.publish(feeder_topic, message)
+    #client.publish(remote_hub_topic, message)
+    #client.publish(camera_outside1_topic, message)
+    #client.publish(camera_outside2_topic, message)
+    if count == 15:
+        # automatically calculate time one minute from now
+        feed_time = str((dt.datetime.now() + dt.timedelta(0,60)).strftime("%H:%M"))
+        client.publish(feeding_time_topic, feed_time)
+        client.publish(meal_size_topic, "300")
     print("count = " + str(count))
     count = count + 1
     time.sleep(1)

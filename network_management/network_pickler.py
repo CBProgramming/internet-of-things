@@ -13,8 +13,10 @@ def unpickle_message(client_socket):
         header_length = nc.get_header_length()
         message_header = client_socket.recv(header_length)
         # handle no data received
+        #print("NP: Message header:")
+        #print(message_header)
         if not len(message_header):
-            return False
+            return ['INVALID_HEADER','']
         # handle received data
         else:
             message_length = int(message_header.decode("utf-8").strip())
