@@ -11,6 +11,8 @@ class ReadSocketHandler:
     def __init__ (self, server_socket, hub_type):
         self.hub_type = hub_type
         self.in_range = True
+        if hub_type == 'remote':
+            self.in_range = False
         self.clients = {}
         self.server_socket = server_socket
         self.sockets = [server_socket]
@@ -68,6 +70,8 @@ class ReadSocketHandler:
                     if collar_range == "AT BOUNDARY":
                         self.hmh.handle_mqtt_message(['remote_hub_actuator','ON'])
                     if collar_range == 'EXCEEDED RANGE':
+                        if self.in_range:
+                            print("Pet no longer in range of home hub")
                         self.in_range = False
                         self.remove_ranged_devices()
                 elif self.hub_type == 'remote':

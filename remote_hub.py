@@ -20,6 +20,7 @@ while True:
         server_socket.bind((ip_address, port))
         server_socket.listen()
         rsh = hrsh.ReadSocketHandler(server_socket, 'remote')
+        print("Listening for new devices...")
         while True:
             r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, socket_timeout)
             rsh.handle_read_sockets(r_socks)
@@ -31,5 +32,5 @@ while True:
             rsh.mqtt_manager.stop_client()
         except:
             None
-        print("Transport hub exception: " + str(e))
-        print("Rebooting hub...")
+        print("Remote hub exception: " + str(e))
+        print("Rebooting...")

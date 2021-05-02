@@ -40,7 +40,7 @@ while status == 'OFFLINE':
 
 status = 'OFFLINE'
 while status == 'OFFLINE':
-    print("Attempting to register remote hub")
+    print("Attempting to register remote hub actuator")
     status = remote_hub_socket.connect(username_remote_hub)
     #print(status)
     if status == 'OFFLINE':  ## sm tries five times on both hubs
@@ -120,13 +120,18 @@ while True:
     # result code 'OK' indicates a message was successfully received
     if result_code == 'OK':
         message = result[1]
-        print(message)
+        #print(message)
 
         if message == 'ON' and not remote_on:
             try:
                 print("Going out of range of home hub...")
                 print("Turning on remote hub...")
-                remote_hub_process = subprocess.Popen(['python','remote_hub.py'])
+                SW_HIDE = 5
+                show_info = subprocess.STARTUPINFO()
+                show_info.dwFlags = subprocess.STARTF_USESHOWWINDOW
+                show_info.wShowWindow = SW_HIDE
+                remote_hub_process = subprocess.Popen(['python','remote_hub.py'],
+                                                      creationflags = subprocess.CREATE_NEW_CONSOLE)
                 remote_on = True
                 GPIO.output(11, GPIO.HIGH)
                 result = remote_hub_socket.send_message('OK ON')
@@ -159,7 +164,7 @@ while True:
     # result code 'OK' indicates a message was successfully received
     if result_code == 'OK':
         message = result[1]
-        print(message)
+        #print(message)
 
         if result_message == "b'ON'":
             GPIO.output(17, GPIO.HIGH)
@@ -179,7 +184,7 @@ while True:
     # result code 'OK' indicates a message was successfully received
     if result_code == 'OK':
         message = result[1]
-        print(message)
+        #print(message)
 
         if result_message == "b'ON'":
             GPIO.output(22, GPIO.HIGH)
@@ -200,7 +205,7 @@ while True:
     # result code 'OK' indicates a message was successfully received
     if result_code == 'OK':
         message = result[1]
-        print(message)
+        #print(message)
 
         if result_message == "b'ON'":
             GPIO.output(27, GPIO.HIGH)

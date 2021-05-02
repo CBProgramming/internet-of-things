@@ -42,6 +42,7 @@ class HubMessageHandler():
             #print("Result: " + str(result))
             if result == 'OK':
                 if self.rsh.in_range == False:
+                    print("Pet within acceptable range of home hub")
                     self.rsh.in_range = True
             if result == 'AT BOUNDARY':
                 for key, value in self.clients.items():

@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import random
+import datetime as dt
 
 def on_message(client, obj, msg):
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
@@ -48,9 +49,9 @@ while True:
     #client.publish(camera_outside1_topic, message)
     #client.publish(camera_outside2_topic, message)
     if count == 15:
-        #client.publish(feeding_time_topic, "13:00")
-        #client.publish(meal_size_topic, "200")
-        client.publish(feeding_time_topic, "13:14")
+        # automatically calculate time one minute from now
+        feed_time = str((dt.datetime.now() + dt.timedelta(0,60)).strftime("%H:%M"))
+        client.publish(feeding_time_topic, feed_time)
         client.publish(meal_size_topic, "300")
     print("count = " + str(count))
     count = count + 1
