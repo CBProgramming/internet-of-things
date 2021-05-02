@@ -59,6 +59,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         northEastLat = findViewById(R.id.northEastBoundslat);
         northEastLng = findViewById(R.id.northEastBoundslng);
 
+        spinValue = "On";
+
         save = findViewById(R.id.SaveButton);
         save.setOnClickListener(this);
 
@@ -92,7 +94,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(parent.getItemAtPosition(position).equals("On"))
+        if(parent.getItemAtPosition(position).equals("ON"))
         {
             spinValue = "ON";
 
@@ -115,8 +117,17 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         if(v == save)
         {
             publish("/petprotector/camera_actuator", spinValue);
-//            publish("/petprotector/food_weight_sensor", foodAmount.toString());
-//            publish("/petprotector/feeder_actuator", feedTime.toString());
+            if(!foodAmount.getText().toString().equals(""))
+            {
+                publish("/petprotector/feeder_actuator/meal_size", foodAmount.getText().toString());
+            }
+            if(!feedTime.getText().toString().equals(""))
+            {
+                publish("/petprotector/feeder_actuator/feeding_times", feedTime.getText().toString());
+            }
+
+
+
 
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
