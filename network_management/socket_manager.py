@@ -144,7 +144,7 @@ class SocketManager:
                 #print(result_list)
                 return result_list
             if result == self.socket_exception or result == self.invalid_header:
-                status = self.connect(self.username)
+                #status = self.connect(self.username)
                 if status == self.offline:
                     #print("Returning: ")
                     #print(result_list)

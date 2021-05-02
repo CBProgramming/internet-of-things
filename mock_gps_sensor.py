@@ -25,26 +25,31 @@ while status == 'OFFLINE':
         # trying sm.connect again
 
 #messaging loop
-count = 1
+current_feet = 1
 new_long = start_long
 while True:
     time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
-    if count < 15:
-        new_long = new_long + one_foot * speed
-    elif count <30:
+    if current_feet > 50:
+        print("Coming home")
+        coming_home = True
+    elif current_feet < 10:
+        print("Leaving home")
+        coming_home = False
+
+    if coming_home:
+        print("Reducing distance")
+        print(current_feet)
         new_long = new_long - one_foot * speed
-    elif count <45:
-        new_long = new_long + one_foot * speed
+        current_feet = current_feet - speed
     else:
-        new_long = new_long - one_foot * speed
-    
-    message = [start_lat, new_long]
-    #message = [1, 'string', ['list', 0]]
-    print("Sending message: " + str(message))
-    count = count + 1
+        print("Increasing distance")
+        print(current_feet)
+        new_long = new_long + one_foot * speed
+        current_feet = current_feet + speed
     # attempt to send message, variable 'success' stores a boolean
     # value indicating if message sending was successful
     if sm:
         #print("attempting sending")
+        message = [start_lat, new_long]
         success = sm.send_message(message)
         #print("success var = " + str(success))

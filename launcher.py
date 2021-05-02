@@ -9,9 +9,14 @@ launch_mock_publisher = True
 launch_mock_subscriber = False
 launch_mock_gps = True
 
-run_time = 120
+# set run time (seconds )for automatic program termination
+run_time = 90
 
-# do not edit
+# WARNING, stopping program manually may leave processes running in the backround
+# which may affect the next run.  If you're experiencing bugs, check Task Manager
+# and stop any Python background processes
+
+# add additional python scripts below
 SW_HIDE = 0
 hide_info = sp.STARTUPINFO()
 hide_info.dwFlags = sp.STARTF_USESHOWWINDOW
@@ -19,7 +24,8 @@ hide_info.wShowWindow = SW_HIDE
 if launch_hub:
     hub_process = sp.Popen(['python','transport_hub.py'])
 if launch_collar_controller:
-    collar_controller_process = sp.Popen(['python','actuator_controller.py'])
+    collar_controller_process = sp.Popen(['python','actuator_controller.py'],
+                              startupinfo=hide_info)
 if launch_feeder_actuator:
     feeder_process = sp.Popen(['python','actuator_feeder.py'],
                               startupinfo=hide_info)
@@ -31,8 +37,9 @@ if launch_mock_subscriber:
                               startupinfo=hide_info)
 if launch_mock_gps:
     mock_gps_process = sp.Popen(['python','mock_gps_sensor.py'],
-                              startupinfo=hide_info)
-
+                              startupinfo=hide_info
+                                )
+# terminate processes
 running = True
 finish_time = (dt.datetime.now() + dt.timedelta(0,run_time)).strftime("%H:%M:%S")
 print("Finish time: " + str(finish_time))
