@@ -23,6 +23,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/poop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pet's Temperature"
@@ -33,7 +34,7 @@
             android:id="@+id/petTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="18sp"/>
 
         <View
