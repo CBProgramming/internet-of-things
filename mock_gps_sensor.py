@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-import time
-import network_management.socket_manager
-=======
 import time, network_management.socket_manager
 import mock_config.default_variables as dv
 
@@ -9,7 +5,6 @@ start_lat = dv.mock_latitude
 start_long = dv.mock_longitude
 one_foot = 0.018/5280
 speed = 3
->>>>>>> c0783964ab6782aa473b74702f8ea7f1c34576a8
 
 username = "gps_sensor"
 sm = network_management.socket_manager.SocketManager()
@@ -30,26 +25,6 @@ while status == 'OFFLINE':
         # trying sm.connect again
 
 #messaging loop
-<<<<<<< HEAD
-count = 100
-while True:
-    time.sleep(1) # don't do this on real code (unless its relevant to simulating data)
-    
-    # set up dummy message
-    message = (f"Message number: " + str(count))
-    #message = [1, 'string', ['list', 0]]
-    print("Sending message: " + str(message))
-    count = count + 1
-    
-    # attempt to send message, variable 'result' stores a boolean
-    # value indicating if message sending was successful
-    result = sm.send_message(message)
-
-    #POSSIBLE RESULTS
-    # 'OK'
-    # 'INVALID MESSAGE FORMAT'
-    # 'OFFLINE'    This one means 5 recconect attempts were tried on both hubs
-=======
 current_feet = 1
 new_long = start_long
 while True:
@@ -78,4 +53,3 @@ while True:
         message = [start_lat, new_long]
         success = sm.send_message(message)
         #print("success var = " + str(success))
->>>>>>> c0783964ab6782aa473b74702f8ea7f1c34576a8
