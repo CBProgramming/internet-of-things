@@ -11,7 +11,7 @@ GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
 
 username_feeder = "feeder_actuator"
 feeder_socket = network_management.socket_manager.SocketManager()
-
+feed_time = ""
 
 
 # register socket with transport layer
@@ -52,19 +52,20 @@ while True:
             message = result_message
             if ":" in message:
                 feed_time = message
-                result = feeder_socket.send_message('TIMER SET')
+                result = feeder_socket.send_message('TIMER SET ' + feed_time)
                 #print("the time is " + current_time)
                 print("Feed time set " + feed_time)
             else:
                 food_amount = message
-                result = feeder_socket.send_message('SIZE SET')
+                result = feeder_socket.send_message('WEIGHT SET ' + food_amount)
                 print("Food weight set " + food_amount)
 
                 if (current_time == feed_time):
                     GPIO.output(10, GPIO.HIGH)
                     print("Feeding time " + feed_time)
                     print("Dispensing food")
-                    result = feeder_socket.send_message('FEEDING')
+                    #feeding_now = "FEEDING"
+                    result = feeder_socket.send_message('FEEDING ' + feed_time)
                     time.sleep(10)
                     print("Food dispensed")
                     GPIO.output(10, GPIO.LOW)
@@ -84,7 +85,8 @@ while True:
                         
                         else:
                             GPIO.output(10, GPIO.HIGH)
-                            result = feeder_socket.send_message('FEEDING')
+                            feeding_now = "FEEDING"
+                            result = feeder_socket.send_message('FEEDING ' + feed_time)
                             print("Feeding time " + feed_time)
                             print("Dispensing food")
                             time.sleep(10)

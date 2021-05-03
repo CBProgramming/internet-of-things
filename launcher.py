@@ -4,11 +4,12 @@ import datetime as dt
 # amend the below boolean values to configure launch
 launch_hub = True
 launch_collar_controller = True
-launch_feeder_actuator = True
+launch_feeder_actuator = False
+launch_camera_outside1 = True
+launch_camera_outside2 = True
 launch_mock_publisher = True
-launch_mock_subscriber = False
+launch_mock_subscriber = True
 launch_mock_gps = True
-
 # set run time (seconds )for automatic program termination
 run_time = 90
 
@@ -27,8 +28,14 @@ if launch_collar_controller:
     collar_controller_process = sp.Popen(['python','actuator_controller.py'],
                               startupinfo=hide_info)
 if launch_feeder_actuator:
-    feeder_process = sp.Popen(['python','actuator_feeder.py'],
-                              startupinfo=hide_info)
+    feeder_process = sp.Popen(['python','actuator_feeder.py'])
+                              #,startupinfo=hide_info)
+if launch_camera_outside1:
+    camera_outside1_process = sp.Popen(['python','actuator_camera_outside1.py'])
+                              #,startupinfo=hide_info)
+if launch_camera_outside2:
+    camera_outside2_process = sp.Popen(['python','actuator_camera_outside2.py'])
+                              #,startupinfo=hide_info)    
 if launch_mock_publisher:
     publish_process = sp.Popen(['python','mock_mqtt_publisher.py'],
                               startupinfo=hide_info)
@@ -59,6 +66,14 @@ while running:
                 feeder_process.terminate()
             except:
                 None
+            try:
+                camera_outside1_process.terminate()
+            except:
+                None
+            try:
+                camera_outside2_process.terminate()
+            except:
+                None    
             try:
                 publish_process.terminate()
             except:
