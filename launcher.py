@@ -10,7 +10,7 @@ launch_mock_subscriber = False
 launch_mock_gps = True
 
 # set run time (seconds )for automatic program termination
-run_time = 90
+run_time = 60
 
 # WARNING, stopping program manually may leave processes running in the backround
 # which may affect the next run.  If you're experiencing bugs, check Task Manager
