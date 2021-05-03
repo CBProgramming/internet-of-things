@@ -117,6 +117,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         if(v == save)
         {
             publish("/petprotector/camera_actuator", spinValue);
+            //publish("/petprotector/feeder_actuator/feeding_times", feedTime.getText().toString());
             if(!foodAmount.getText().toString().equals(""))
             {
                 publish("/petprotector/feeder_actuator/meal_size", foodAmount.getText().toString());

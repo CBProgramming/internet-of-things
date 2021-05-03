@@ -41,7 +41,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
 
     MqttConnectOptions options;
 
-    TextView cameraOn, feedAmount;
+    TextView cameraOn, feedAmount, feedingTimes;
 
     String store;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,6 +66,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
 
         cameraOn =  root.findViewById(R.id.cameraOn);
         feedAmount = root.findViewById(R.id.feedAmount);
+        feedingTimes = root.findViewById(R.id.feedingTimes);
 
         try {
             IMqttToken token = client.connect(options);
@@ -73,8 +74,9 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
 
-                    subscribe("/petprotector/feeder_actuator", feedAmount);
-                    subscribe("/petprotector/camera_actuator", cameraOn);
+                    subscribe();
+                   // subscribe("/petprotector/camera_actuator", cameraOn);
+
 
 //                    subscribe("/petprotector/feeder_actuator/feeding_times");
                 }
@@ -109,13 +111,16 @@ public class InformationFragment extends Fragment implements View.OnClickListene
 
 
 
-    private void subscribe(String channelName, TextView t)
+    private void subscribe()
     {
         try{
             if(client.isConnected())
             {
                 client.subscribe("/petprotector/camera_actuator", 0);
-                client.subscribe("/petprotector/feeder_actuator", 0);
+                client.subscribe("/petprotector/feeder_actuator/feeding_times", 0);
+                client.subscribe("/petprotector/feeder_actuator/meal_size", 0);
+                client.subscribe("/petprotector/feeder_actuator/data", 0);
+                //add camera on data subsribe /petprotector/camera_actuator/data
                 client.setCallback(new MqttCallback() {
                     @Override
                     public void connectionLost(Throwable cause) {
@@ -128,9 +133,19 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                         {
                             cameraOn.setText(message.toString());
                         }
-                        else if (topic.equals("/petprotector/feeder_actuator"))
+                        else if (topic.equals("/petprotector/feeder_actuator/feeding_times"))
+                        {
+                            feedingTimes.setText(message.toString());
+                        }
+                        else if (topic.equals("/petprotector/feeder_actuator/meal_size"))
                         {
                             feedAmount.setText(message.toString());
+                        }
+                        else if(topic.equals("/petprotector/feeder_actuator/data"))
+                        {
+                            feedAmount.setText(message.toString());
+                            feedingTimes.setText(message.toString());
+                            cameraOn.setText(message.toString());
                         }
 
                     }
