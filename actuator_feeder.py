@@ -11,7 +11,7 @@ GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
 
 username_feeder = "feeder_actuator"
 feeder_socket = network_management.socket_manager.SocketManager()
-
+feed_time = ""
 
 
 # register socket with transport layer
@@ -41,8 +41,10 @@ while True:
 
     if result_message == "b'ON'":
         GPIO.output(10, GPIO.HIGH)
+        print("Dispensing food")
         result = feeder_socket.send_message('OK ON')
     elif result_message == "b'OFF'":
+        print("Food dispensed")
         GPIO.output(10, GPIO.LOW)
         result = feeder_socket.send_message('OK OFF')
     else:
@@ -50,37 +52,46 @@ while True:
             message = result_message
             if ":" in message:
                 feed_time = message
-                result = feeder_socket.send_message('TIMER SET')
-                print("the time is " + current_time)
-                print("feed time is " + feed_time)
+                result = feeder_socket.send_message('TIMER SET ' + feed_time)
+                #print("the time is " + current_time)
+                print("Feed time set " + feed_time)
             else:
                 food_amount = message
-                result = feeder_socket.send_message('SIZE SET')
-                print("food weight is " + food_amount)
+                result = feeder_socket.send_message('WEIGHT SET ' + food_amount)
+                print("Food weight set " + food_amount)
 
                 if (current_time == feed_time):
                     GPIO.output(10, GPIO.HIGH)
-                    result = feeder_socket.send_message('FEEDING')         
-                    print("feeding " + feed_time)
+                    print("Feeding time " + feed_time)
+                    print("Dispensing food")
+                    #feeding_now = "FEEDING"
+                    result = feeder_socket.send_message('FEEDING ' + feed_time)
+                    time.sleep(10)
+                    print("Food dispensed")
+                    GPIO.output(10, GPIO.LOW)
+                    
                 else:
                     while True:
                         current_time != feed_time
-                        print(current_time)
-                        print(feed_time)
-                        time.sleep(60)
+                        #print(current_time)
+                        #print(feed_time)
+                        time.sleep(1)
                         current_time = time.strftime("b'" + "%H:%M" + "'")
                         if (current_time != feed_time):
-                            print(current_time)
-                            print(feed_time)
-                            print("not time yet")
+                            None
+                            #print(current_time)
+                            #print(feed_time)
+                            #print("not time yet")
                         
                         else:
                             GPIO.output(10, GPIO.HIGH)
-                            result = feeder_socket.send_message('FEEDING')
+                            feeding_now = "FEEDING"
+                            result = feeder_socket.send_message('FEEDING ' + feed_time)
+                            print("Feeding time " + feed_time)
                             print("Dispensing food")
-                            print("Feeding " + feed_time)
                             time.sleep(10)
                             print("Food dispensed")
+                            GPIO.output(10, GPIO.LOW)
                         
                             break
 

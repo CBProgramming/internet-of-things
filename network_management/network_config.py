@@ -3,6 +3,7 @@ import socket
 port = 8301
 remote_port = 8302
 header_length = 10
+socket_timeout = .25
 
 def get_port():
     return port

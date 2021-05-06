@@ -4,3 +4,4 @@ ranged_devices = ['gps_sensor','temperature_sensor','sound_sensor',
                   'motion_sensor','collar_battery_sensor','camera_actuator',
                   'microphone_actuator','speaker_actuator',
                   'remote_hub_actuator']
+socket_timeout = 1

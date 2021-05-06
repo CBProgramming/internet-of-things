@@ -38,10 +38,10 @@ def calculate_with_real_gps(gps_coords):
     if distance <= range_tolerance:
         return 'OK'
     elif distance <= bluetooth_range:
-        print("Pet is almost out of range of home hub")
+        print("Pet is at home hub boundary")
         return 'AT BOUNDARY'
     elif distance > bluetooth_range:
-        print("Pet is not in range")
+        #print("Pet is not in range")
         return 'EXCEEDED RANGE'
     
 def degrees_to_radians(deg):

@@ -6,7 +6,7 @@ import hub_files.hub_exception_socket_handler as esh
 import hub_files.hub_message_handler
 
 
-socket_timeout = 0.25
+s_timeout = nc.socket_timeout
 
 print("Initialising remote hub...")
 
@@ -20,8 +20,9 @@ while True:
         server_socket.bind((ip_address, port))
         server_socket.listen()
         rsh = hrsh.ReadSocketHandler(server_socket, 'remote')
+        print("Listening for new devices...")
         while True:
-            r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, socket_timeout)
+            r_socks, w_socks, e_socks = select.select(rsh.sockets, [], rsh.sockets, s_timeout)
             rsh.handle_read_sockets(r_socks)
             if e_socks:
                 esh.handle_exception_sockets(e_socks, rsh.sockets, rsh.clients, rsh.bsh)
@@ -31,5 +32,5 @@ while True:
             rsh.mqtt_manager.stop_client()
         except:
             None
-        print("Transport hub exception: " + str(e))
-        print("Rebooting hub...")
+        print("Remote hub exception: " + str(e))
+        print("Rebooting...")
