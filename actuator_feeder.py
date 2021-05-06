@@ -49,7 +49,7 @@ while True:
         result = feeder_socket.send_message('OK OFF')
     else:
         if result_code == 'OK':
-            messa-+ge = result_message
+            message = result_message
             if ":" in message:
                 feed_time = message
                 result = feeder_socket.send_message('TIMER SET ' + feed_time)
