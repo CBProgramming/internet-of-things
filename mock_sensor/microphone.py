@@ -1,20 +1,12 @@
-import random as rng
+import os
+import random as random
+import wave
 
 class Microphone:
     def __init__(self):
-        self.current_weight = 0
+        self.source = ""##where will we store sound files?
 
-    def get_weight(self):
-        self.update_weight()
-        return self.current_weight
-
-    def update_weight(self):
-        if self.current_weight > 0:
-            amount_eaten = rng.randint(0, 12)
-            if self.current_weight >= amount_eaten:
-                self.current_weight = 0
-            else:
-                self.current_weight -= amount_eaten
-        else:
-            if rng.randint(0, 7) == 1:
-                self.current_weight = 120
+    def get_sound(self):
+        if random.randint(0, 12) == 1:
+            sound = random.choice(os.listdir(self.source))
+            return sound

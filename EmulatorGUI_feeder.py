@@ -205,7 +205,7 @@ class App(threading.Thread):
         dictionaryPinsTkinter["10"] = pin19btn
 
         #GPIO09
-        pin21btn = Button(text="GPIO9\nOUT=0", command="9", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin21btn = Button(text="WEIGHT-9\nSENSOR", command="9", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin21btn.grid(row=1, column=10, padx=(10, 10))
 
         dictionaryPinsTkinter["9"] = pin21btn

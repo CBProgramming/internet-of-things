@@ -1,6 +1,6 @@
 import random as rng
 
-class LoadCell:
+class BatteryIndicator:
     def __init__(self):
         self.current_battery_level = 100
         self.charging = False

@@ -61,7 +61,7 @@ class App(threading.Thread):
 
         
         #GPIO18
-        pin12btn = Button(text="GPIO18\nOUT=0", command="18",  padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin12btn = Button(text="BATTERY-18\nSENSOR", command="18",  padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin12btn.grid(row=0, column=5, padx=(10, 10))
 
         dictionaryPinsTkinter["18"] = pin12btn
@@ -72,14 +72,14 @@ class App(threading.Thread):
         pin14label.grid(row=0, column=6, padx=(10, 10))
 
         #GPIO23
-        pin16btn = Button(text="GPIO23\nOUT=0", command="23", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin16btn = Button(text="GPS-23\nSENSOR", command="23", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin16btn.grid(row=0, column=7, padx=(10, 10))
 
         dictionaryPinsTkinter["23"] = pin16btn
 
 
         #GPIO24
-        pin18btn = Button(text="GPIO24\nOUT=0",command="24",  padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin18btn = Button(text="MOTION-24\nSENSOR",command="24",  padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin18btn.grid(row=0, column=8, padx=(10, 10))
 
         dictionaryPinsTkinter["24"] = pin18btn
@@ -90,14 +90,14 @@ class App(threading.Thread):
         pin20label.grid(row=0, column=9, padx=(10, 10))
 
         #GPIO25
-        pin22btn = Button(text="GPIO25\nOUT=0", command="25", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin22btn = Button(text="SOUND-25\nSENSOR", command="25", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin22btn.grid(row=0, column=10, padx=(10, 10))
 
         dictionaryPinsTkinter["25"] = pin22btn
 
         
         #GPIO08
-        pin24btn = Button(text="GPIO8\nOUT=0", command="8", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
+        pin24btn = Button(text="TEMPERATURE-8\nSENSOR", command="8", padx ="1px", pady="1px", bd="0px", fg="blue", relief="sunken", activeforeground="blue")
         pin24btn.grid(row=0, column=11, padx=(10, 10))
 
         dictionaryPinsTkinter["8"] = pin24btn

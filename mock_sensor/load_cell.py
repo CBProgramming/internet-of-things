@@ -17,6 +17,6 @@ class LoadCell:
                 self.current_weight -= amount_eaten
         else:
             if rng.randint(0, 7) == 1:
-                self.current_weight = 120
+                self.current_weight = 3000
 
 
