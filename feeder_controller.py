@@ -4,6 +4,8 @@ import mock_sensor.load_cell
 from EmulatorGUI_feeder import GPIO
 
 # import feeder_actuator_clock
+default_food_amount = 100
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -45,7 +47,9 @@ while status == 'OFFLINE':
 # messaging loop
 while True:
     message = weight_sensor.get_weight()
+    print(message)
     result = weight_sensor_socket.send_message(message)
+    time.sleep(1)
 
     # receive result, which is a list in the format [result_code, message]
     result = feeder_socket.receive_message()
@@ -62,6 +66,7 @@ while True:
     if result_message == "b'ON'":
         GPIO.output(10, GPIO.HIGH)
         print("Dispensing food")
+        weight_sensor.update_weight(default_food_amount)
         result = feeder_socket.send_message('OK ON')
     elif result_message == "b'OFF'":
         print("Food dispensed")
@@ -87,6 +92,7 @@ while True:
                     # feeding_now = "FEEDING"
                     result = feeder_socket.send_message('FEEDING ' + feed_time)
                     time.sleep(10)
+                    weight_sensor.update_weight(food_amount)
                     print("Food dispensed")
                     GPIO.output(10, GPIO.LOW)
 
@@ -112,6 +118,7 @@ while True:
                             time.sleep(10)
                             print("Food dispensed")
                             GPIO.output(10, GPIO.LOW)
+                            weight_sensor.update_weight(food_amount)
 
                             break
 

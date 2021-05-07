@@ -46,19 +46,19 @@ while True:
     client.publish(camera_topic, message)
     client.publish(speaker_topic, message)
     client.publish(microphone_topic, message)
-    client.publish(feeder_topic, message)
-    client.publish(feeding_time_topic,message)
-    client.publish(meal_size_topic,message)
-    client.publish(dispencing_food_topic,message)
+    #client.publish(feeder_topic, message)
+    #client.publish(feeding_time_topic,message)
+    #client.publish(meal_size_topic,message)
+    #client.publish(dispencing_food_topic,message)
     #client.publish(food_dispenced_topic,feed_time)
     #client.publish(remote_hub_topic, message)
     #client.publish(camera_outside1_topic, message)
     #client.publish(camera_outside2_topic, message)
-   # if count == 15:
+    if count == 15:
          #automatically calculate time one minute from now
-       # feed_time = str((dt.datetime.now() + dt.timedelta(0,60)).strftime("%H:%M"))
-       # client.publish(feeding_time_topic, feed_time)
-       # client.publish(meal_size_topic, "300")
+        feed_time = str((dt.datetime.now() + dt.timedelta(0,60)).strftime("%H:%M"))
+        client.publish(feeding_time_topic, feed_time)
+        client.publish(meal_size_topic, "300")
     print("count = " + str(count))
     count = count + 1
     time.sleep(1)

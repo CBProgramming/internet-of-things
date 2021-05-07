@@ -2,21 +2,16 @@ import random as rng
 
 class LoadCell:
     def __init__(self):
-        self.current_weight = 0
+        self.current_weight = 3000
 
     def get_weight(self):
-        self.update_weight()
         return self.current_weight
 
-    def update_weight(self):
-        if self.current_weight > 0:
-            amount_eaten = rng.randint(0, 12)
-            if self.current_weight >= amount_eaten:
-                self.current_weight = 0
-            else:
-                self.current_weight -= amount_eaten
-        else:
-            if rng.randint(0, 7) == 1:
-                self.current_weight = 3000
+    def update_weight(self, amount):
+        #print(amount)
+        #print(type(amount))
+        new_amount = amount[2:-1]
+        #print(new_amount)
+        self.current_weight = self.current_weight - int(new_amount)
 
 
