@@ -7,6 +7,12 @@ import mock_sensor.gps_receiver
 import mock_sensor.microphone
 import mock_sensor.thermistor
 from EmulatorGUI_controller import GPIO
+import mock_config.default_variables as dv
+
+start_lat = dv.mock_latitude
+start_long = dv.mock_longitude
+one_foot = 0.018/5280
+speed = 3
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -54,7 +60,7 @@ gps_sensor = mock_sensor.gps_receiver.GPSReceiver()
 GPIO.output(23, GPIO.HIGH)
 motion_sensor = mock_sensor.accelerometer.Accelerometer()
 GPIO.output(24, GPIO.HIGH)
-sound_sensor = mock_sensor.microphone
+sound_sensor = mock_sensor.microphone.Microphone()
 GPIO.output(25, GPIO.HIGH)
 temperature_sensor = mock_sensor.thermistor.Thermistor()
 GPIO.output(8, GPIO.HIGH)
@@ -177,15 +183,44 @@ while status == 'OFFLINE':
 # time.sleep(1) # this might need better handling as currently it just
 # spams the network every second
 
+current_feet = 1
+new_long = start_long
+
 # messaging loop
 while True:
+    time.sleep(1)
 
     message = battery_sensor .get_battery_level()
     result = battery_sensor_socket.send_message(message)
 
-    latitude, longitude = gps_sensor.get_position()
-    message = [latitude, longitude]
-    result = gps_sensor_socket.send_message(message)
+    #latitude, longitude = gps_sensor.get_position()
+    #message = [latitude, longitude]
+    #result = gps_sensor_socket.send_message(message)
+
+    if current_feet > 50:
+        #print("Coming home")
+        coming_home = True
+    elif current_feet < 10:
+        #print("Leaving home")
+        coming_home = False
+
+    if coming_home:
+        #print("Reducing distance")
+        #print(current_feet)
+        new_long = new_long - one_foot * speed
+        current_feet = current_feet - speed
+    else:
+        #print("Increasing distance")
+        #print(current_feet)
+        new_long = new_long + one_foot * speed
+        current_feet = current_feet + speed
+    # attempt to send message, variable 'success' stores a boolean
+    # value indicating if message sending was successful
+    if gps_sensor_socket:
+        #print("attempting sending")
+        message = [start_lat, new_long]
+        success = gps_sensor_socket.send_message(message)
+        
 
     message = motion_sensor.get_acceleration()
     result = motion_sensor_socket.send_message(message)
@@ -196,7 +231,7 @@ while True:
     message = temperature_sensor.get_temperature()
     result = temperature_sensor_socket.send_message(message)
 
-    time.sleep(1)
+    
 
     # receive result, which is a list in the format [result_code, message]
     """result = feeder_socket.receive_message()

@@ -81,7 +81,7 @@ class SocketManager:
                 #print("Unable to connect to the server")
                 return False
         except Exception as e:
-            print("Socket manager registration exception: " + str(e))
+            #print("Socket manager registration exception: " + str(e))
             return False
 
     def internal_send_message(self, message):
@@ -92,10 +92,11 @@ class SocketManager:
                 self.socket.send(pickled_message)
                 return self.ok_result
             else:
+                print(self.username + ":")
                 print("An attempt was made to send an empty message")
                 return self.invalid_message
         except Exception as e:
-            print("Socket manager send message exception: " + str(e))
+            #print("Socket manager send message exception: " + str(e))
             return self.socket_exception
 
     def send_message(self, message):
@@ -129,7 +130,7 @@ class SocketManager:
                 return [no_messages, str(e)]
             return [no_messages, str(e)]
         except Exception as e:
-            print("Socket manager receive message exception: " + str(e))
+            #print("Socket manager receive message exception: " + str(e))
             return [self.socket_exception, e]
                 
     def receive_message(self):
@@ -145,10 +146,10 @@ class SocketManager:
                 return result_list
             if result == self.socket_exception or result == self.invalid_header:
                 #status = self.connect(self.username)
-                if status == self.offline:
+                #if status == self.offline:
                     #print("Returning: ")
                     #print(result_list)
-                    return result_list
+                return result_list
                     
             attempts = attempts + 1
         #print("Nothing to return")

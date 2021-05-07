@@ -20,9 +20,9 @@ class HubMessageHandler():
             #print("Handling network message")
             sensor = self.clients[notified_socket]
             #print("Sensor: " + str(sensor))
-            if sensor == 'gps_sensor':
-                print("GPS received as: " + str(message))
-                print(type(message))
+            #if sensor == 'gps_sensor':
+                #print("GPS received as: " + str(message))
+                #print(type(message))
             if sensor == 'camera_actuator' or sensor == 'microphone_actuator' or sensor == 'speaker_actuator' or sensor == 'feeder_actuator':
                 self.mqtt_manager.publish_message(sensor + self.data_string, json.dumps(message))
             elif sensor == 'gps_sensor':
@@ -34,7 +34,8 @@ class HubMessageHandler():
                         self.mqtt_manager.publish_message('gps/lng', json.dumps(gps_lon))
                         
                     except:
-                        self.mqtt_manager.publish_message(sensor, json.dumps(message))
+                        None
+                self.mqtt_manager.publish_message(sensor, json.dumps(message))
                 self.gps_count = self.gps_count + 1
                 if self.gps_count >= self.gps_trigger:
                     self.gps_count = 0
@@ -77,7 +78,13 @@ class HubMessageHandler():
             if message_key == value or self.is_message_for_feeder(message_key, value):
                 #print("Sending on key: " + str(message_key))
                 pickled_message = np.pickle_message(data)
-                key.send(pickled_message)
+                #print(key)
+                try:
+                    key.send(pickled_message)
+                except:
+                    print("HMH: Error when sending message on key: " + str(value))
+                #print("Sent on key: " + str(message_key))
+                
             
     def is_message_for_feeder(self, message_key, value):
         if value == 'feeder_actuator':
@@ -94,5 +101,7 @@ class HubMessageHandler():
         for client_socket in self.clients:
             if client_socket != notified_socket:
                 pickled_message = np.pickle_message(message)
+                print(pickled_message)
                 client_socket.send(pickled_message)
+                
     

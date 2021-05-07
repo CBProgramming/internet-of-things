@@ -26,11 +26,7 @@ mock_actuator_1_topic = "/petprotector/Mock Actuator 1"
 mock_actuator_2_topic = "/petprotector/Mock Actuator 2"
 feeding_time_topic = "/petprotector/feeder_actuator/feeding_times"
 meal_size_topic = "/petprotector/feeder_actuator/meal_size"
-<<<<<<< HEAD
-#dispencing_food_topic = "/petprotector/feeder_actuator/dispencing_food"
-=======
 dispencing_food_topic = "/petprotector/feeder_actuator/dispencing_food"
->>>>>>> 5f750eb4f2886a2ac8e87173d92db86a63a3ca61
 #food_dispenced_topic = "/petprotector/feeder_actuator/food_dispenced"
 #subscribe to topics and start subscription loop
 client.subscribe(gps_topic, 0)
@@ -51,32 +47,18 @@ while True:
     client.publish(speaker_topic, message)
     client.publish(microphone_topic, message)
     client.publish(feeder_topic, message)
-<<<<<<< HEAD
-    #client.publish(feeding_time_topic,message)
-    #client.publish(meal_size_topic,message)
-    #client.publish(dispencing_food_topic,message)
-=======
     client.publish(feeding_time_topic,message)
     client.publish(meal_size_topic,message)
     client.publish(dispencing_food_topic,message)
->>>>>>> 5f750eb4f2886a2ac8e87173d92db86a63a3ca61
     #client.publish(food_dispenced_topic,feed_time)
     #client.publish(remote_hub_topic, message)
     #client.publish(camera_outside1_topic, message)
     #client.publish(camera_outside2_topic, message)
-<<<<<<< HEAD
-    if count == 15:
-         #automatically calculate time one minute from now
-        feed_time = str((dt.datetime.now() + dt.timedelta(0,60)).strftime("%H:%M"))
-        client.publish(feeding_time_topic, feed_time)
-        client.publish(meal_size_topic, "300")
-=======
    # if count == 15:
          #automatically calculate time one minute from now
        # feed_time = str((dt.datetime.now() + dt.timedelta(0,60)).strftime("%H:%M"))
        # client.publish(feeding_time_topic, feed_time)
        # client.publish(meal_size_topic, "300")
->>>>>>> 5f750eb4f2886a2ac8e87173d92db86a63a3ca61
     print("count = " + str(count))
     count = count + 1
     time.sleep(1)
