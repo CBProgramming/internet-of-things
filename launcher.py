@@ -7,7 +7,7 @@ launch_collar_controller = True
 launch_feeder_actuator = True
 launch_camera_outside1 = True
 launch_camera_outside2 = True
-launch_mock_publisher = True
+launch_mock_publisher = False
 launch_mock_subscriber = False
 launch_mock_gps = False
 # set run time (seconds )for automatic program termination
