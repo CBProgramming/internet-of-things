@@ -24,13 +24,20 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import uk.ac.tees.t7099806.iotbottomnavigation.MainActivity;
 import uk.ac.tees.t7099806.iotbottomnavigation.R;
 import uk.ac.tees.t7099806.iotbottomnavigation.SettingsActivity;
+import uk.ac.tees.t7099806.iotbottomnavigation.SettingsDialog;
 
-public class InformationFragment extends Fragment implements View.OnClickListener {
+public class InformationFragment extends Fragment implements View.OnClickListener, SettingsDialog.OnInputSelected{
+
+    private static  final String TAG = "InformationFragment";
 
     Button settingsBtn, releaseBtn;
 
@@ -41,7 +48,9 @@ public class InformationFragment extends Fragment implements View.OnClickListene
 
     MqttConnectOptions options;
 
-    TextView cameraOn, feedAmount, feedingTimes;
+    TextView cameraOn, feedAmount, feedingTimes, petTemp, collarBattery;
+    public String cameraO, foodAmount, feedTime, speakerOn, microphoneOn;
+    TextView  notif;
 
     String store;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,6 +76,10 @@ public class InformationFragment extends Fragment implements View.OnClickListene
         cameraOn =  root.findViewById(R.id.cameraOn);
         feedAmount = root.findViewById(R.id.feedAmount);
         feedingTimes = root.findViewById(R.id.feedingTimes);
+        petTemp = root.findViewById(R.id.petTemp);
+        collarBattery = root.findViewById(R.id.collarBattery);
+
+        notif = root.findViewById(R.id.NotificationsRec);
 
         try {
             IMqttToken token = client.connect(options);
@@ -75,10 +88,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                 public void onSuccess(IMqttToken asyncActionToken) {
 
                     subscribe();
-                   // subscribe("/petprotector/camera_actuator", cameraOn);
-
-
-//                    subscribe("/petprotector/feeder_actuator/feeding_times");
                 }
 
                 @Override
@@ -90,8 +99,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
 
-
-       // petTemp.setText(store);
         Toast.makeText(getContext(), store, Toast.LENGTH_SHORT).show();
 
         return root;
@@ -101,11 +108,22 @@ public class InformationFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         if(v == settingsBtn)
         {
-            startActivity(new Intent(getContext(), SettingsActivity.class));
+            SettingsDialog settingsDialog = new SettingsDialog();
+            settingsDialog.setTargetFragment(InformationFragment.this, 1);
+            settingsDialog.show(getFragmentManager(),"SettingsDialog");
         }
         if(v == releaseBtn)
         {
+            Date date = Calendar.getInstance().getTime();
+            DateFormat format = new SimpleDateFormat("HHmm");
+            String strDate = format.format(date);
 
+            String firstHalf = strDate.substring(0, strDate.length() - 2);
+            String secondHalf = strDate.substring(2);
+            String full = firstHalf + ":" + secondHalf;
+
+            publish("/petprotector/feeder_actuator/feeding_times", full);
+            publish("/petprotector/feeder_actuator/meal_size", "620");
         }
     }
 
@@ -116,11 +134,13 @@ public class InformationFragment extends Fragment implements View.OnClickListene
         try{
             if(client.isConnected())
             {
-                client.subscribe("/petprotector/camera_actuator", 0);
+                client.subscribe("/petprotector/camera_actuator/data", 0);
                 client.subscribe("/petprotector/feeder_actuator/feeding_times", 0);
                 client.subscribe("/petprotector/feeder_actuator/meal_size", 0);
                 client.subscribe("/petprotector/feeder_actuator/data", 0);
-                //add camera on data subsribe /petprotector/camera_actuator/data
+                client.subscribe("/petprotector/temperature_sensor", 0);
+                client.subscribe("/petprotector/collar_battery_sensor", 0);
+
                 client.setCallback(new MqttCallback() {
                     @Override
                     public void connectionLost(Throwable cause) {
@@ -129,23 +149,53 @@ public class InformationFragment extends Fragment implements View.OnClickListene
 
                     @Override
                     public void messageArrived(String topic, MqttMessage message) throws Exception {
-                        if(topic.equals("/petprotector/camera_actuator"))
+                        if(topic.equals("/petprotector/camera_actuator/data"))
                         {
                             cameraOn.setText(message.toString());
-                        }
-                        else if (topic.equals("/petprotector/feeder_actuator/feeding_times"))
-                        {
-                            feedingTimes.setText(message.toString());
-                        }
-                        else if (topic.equals("/petprotector/feeder_actuator/meal_size"))
-                        {
-                            feedAmount.setText(message.toString());
+                            System.out.println("camera: " + message.toString());
+                            notif.setText(notif.getText().toString() + " " + message.toString());;
                         }
                         else if(topic.equals("/petprotector/feeder_actuator/data"))
                         {
-                            feedAmount.setText(message.toString());
-                            feedingTimes.setText(message.toString());
-                            cameraOn.setText(message.toString());
+                            System.out.println(message.toString());
+                            if(message.toString().contains("TIMER"))
+                            {
+                                String time = message.toString();
+                                time = time.substring(13);
+                                time = time.substring(0, time.length() - 2);
+                                feedingTimes.setText(time);
+                                System.out.println("TIME= " + time);
+
+                                String formN = message.toString();
+                                formN = formN.substring(1);
+                                formN = formN.substring(0, formN.length() - 9);
+
+                                notif.setText(notif.getText().toString() + " " + formN);
+                            }
+                            if(message.toString().contains("WEIGHT"))
+                            {
+                                String weight = message.toString();
+                                weight = weight.substring(14);
+                                weight = weight.substring(0, weight.length() - 2);
+                                feedAmount.setText(weight);
+
+                                String formN = message.toString();
+                                formN = formN.substring(1);
+                                formN = formN.substring(0, formN.length() - 7);
+
+                                notif.setText(notif.getText().toString() + " " + formN);;
+                            }
+
+                        }
+                        else if(topic.equals("/petprotector/temperature_sensor"))
+                        {
+                            petTemp.setText(message.toString());
+                            notif.setText(notif.getText().toString() + " " + message.toString());;
+                        }
+                        else if(topic.equals("/petprotector/collar_battery_sensor"))
+                        {
+                            collarBattery.setText(message.toString());
+                            notif.setText(notif.getText().toString() + " " + message.toString());;
                         }
 
                     }
@@ -162,4 +212,38 @@ public class InformationFragment extends Fragment implements View.OnClickListene
     }
 
 
+
+    @Override
+    public void sendInput(String c, String f, String fT, String s, String m) {
+        cameraO = c;
+        foodAmount = f;
+        feedTime = fT;
+        speakerOn = s;
+        microphoneOn= m;
+
+        publish("/petprotector/camera_actuator", cameraO);
+        publish("/petprotector/feeder_actuator/meal_size", foodAmount);
+
+
+
+        String firstHalf = feedTime.substring(0, feedTime.length() - 3);
+        String secondHalf = feedTime.substring(2);
+        String full = firstHalf + secondHalf;
+        publish("/petprotector/feeder_actuator/feeding_times", full);
+        publish("/petprotector/speaker_actuator", speakerOn);
+        publish("/petprotector/microphone_actuator", microphoneOn);
+        System.out.println("Feed time: " + feedTime);
+
+    }
+
+
+    private void publish(String topic, String message)
+    {
+        byte[] encodedPayload = new byte[0];
+        try {
+            client.publish(topic, message.getBytes(), 0, false);
+        } catch (MqttException e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -4,17 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Information.InformationFragment">
+    android:orientation="vertical"
+    tools:context=".ui.Information.InformationFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="20dp"
         android:orientation="vertical">
 
     <LinearLayout
@@ -114,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Camera on?"
+                android:text="Camera"
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimary"/>
 
@@ -203,12 +200,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Out of bound Coordinates"
+                android:text="Microphone"
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/coordinates"
+                android:id="@+id/micOn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
@@ -223,41 +220,117 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Speakeer"
+                android:textSize="15sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <TextView
+                android:id="@+id/speakerO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimaryDark"
+                />
+
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="0dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/buttonChangeSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif-light"
+                android:text="Change Settings"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonReleaseFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="188dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif-light"
+                android:text="Release Food Early"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toRightOf="@+id/buttonChangeSettings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="101dp"
+                android:layout_margin="0dp"
+                android:orientation="horizontal"
+                android:weightSum="0">
+
+                <TextView
+                    android:id="@+id/Notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="Notifications"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/NotificationsRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:gravity="center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/Notifications"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
+
+
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonChangeSettings"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_below="@+id/linear1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="217dp"
-        android:background="@color/colorPrimary"
-        android:fontFamily="sans-serif-light"
-        android:text="Change Settings"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/buttonReleaseFood"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_below="@+id/linear1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="212dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="50dp"
-        android:background="@color/colorPrimary"
-        android:fontFamily="sans-serif-light"
-        android:text="Release Food Early"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
 
 
 </RelativeLayout>
