@@ -106,17 +106,17 @@ class ReadSocketHandler:
                         self.at_boundary = False
                         if self.beyond_boundary:
                             self.beyond_boundary = False
-                            self.mqtt_manager.publish_message("/petprotector/user_notification","PET_RETURNED")
+                            self.mqtt_manager.publish_message("user_notification","PET_RETURNED")
                     if collar_range == "AT BOUNDARY":
                         self.at_boundary = True
                         if self.at_home:
                             self.at_home = False
                             self.beyond_boundary = False
-                            self.mqtt_manager.publish_message("/petprotector/user_notification","BOUNDARY_REACHED")
+                            self.mqtt_manager.publish_message("user_notification","BOUNDARY_REACHED")
                         elif self.beyond_boundary:
                             self.at_home = False
                             self.beyond_boundary = False
-                            self.mqtt_manager.publish_message("/petprotector/user_notification","PET_RETURNED")
+                            self.mqtt_manager.publish_message("user_notification","PET_RETURNED")
                         self.hmh.handle_mqtt_message(['remote_hub_actuator','ON'])
                     if collar_range == 'EXCEEDED RANGE':
                         self.beyond_boundary = True
@@ -124,7 +124,7 @@ class ReadSocketHandler:
                             if self.at_home or self.at_boundary:
                                 self.at_home = False
                                 self.at_boundary = False
-                                self.mqtt_manager.publish_message("/petprotector/user_notification","PET_OUTSIDE_BOUNDARY")
+                                self.mqtt_manager.publish_message("user_notification","PET_OUTSIDE_BOUNDARY")
                             print("Pet no longer in range of home hub")
                         self.in_range = False
                         self.remove_ranged_devices()
