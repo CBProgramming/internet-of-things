@@ -13,10 +13,10 @@
         android:icon="@drawable/ic_map"
         android:title="Pet's location" />
 
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications"
-        android:title="Notifications"
-        />
+<!--    <item-->
+<!--        android:id="@+id/navigation_notifications"-->
+<!--        android:icon="@drawable/ic_notifications"-->
+<!--        android:title="Notifications"-->
+<!--        />-->
 
 </menu>

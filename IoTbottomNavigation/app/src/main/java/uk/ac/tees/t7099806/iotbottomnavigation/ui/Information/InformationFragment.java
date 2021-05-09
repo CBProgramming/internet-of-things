@@ -48,7 +48,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
 
     MqttConnectOptions options;
 
-    TextView cameraOn, feedAmount, feedingTimes, petTemp, collarBattery;
+    TextView cameraOn, feedWeight, feedAmount, feedingTimes, petTemp, collarBattery, micOn, speakerO, motion;
     public String cameraO, foodAmount, feedTime, speakerOn, microphoneOn;
     TextView  notif;
 
@@ -78,6 +78,10 @@ public class InformationFragment extends Fragment implements View.OnClickListene
         feedingTimes = root.findViewById(R.id.feedingTimes);
         petTemp = root.findViewById(R.id.petTemp);
         collarBattery = root.findViewById(R.id.collarBattery);
+        feedWeight = root.findViewById(R.id.feederWeight);
+        micOn = root.findViewById(R.id.micOn);
+        speakerO = root.findViewById(R.id.speakerO);
+        motion = root.findViewById(R.id.motionS);
 
         notif = root.findViewById(R.id.NotificationsRec);
 
@@ -135,11 +139,18 @@ public class InformationFragment extends Fragment implements View.OnClickListene
             if(client.isConnected())
             {
                 client.subscribe("/petprotector/camera_actuator/data", 0);
+                client.subscribe("/petprotector/microphone_actuator/data", 0);
+                client.subscribe("/petprotector/speaker_actuator/data", 0);
                 client.subscribe("/petprotector/feeder_actuator/feeding_times", 0);
                 client.subscribe("/petprotector/feeder_actuator/meal_size", 0);
                 client.subscribe("/petprotector/feeder_actuator/data", 0);
-                client.subscribe("/petprotector/temperature_sensor", 0);
                 client.subscribe("/petprotector/collar_battery_sensor", 0);
+//                client.subscribe("/petprotector/gps_sensor", 0);
+                client.subscribe("/petprotector/motion_sensor",0);
+                client.subscribe("/petprotector/temperature_sensor", 0);
+                client.subscribe("/petprotector/food_weight_sensor", 0);
+                client.subscribe("/petprotector/user_notification", 0);
+
 
                 client.setCallback(new MqttCallback() {
                     @Override
@@ -153,7 +164,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                         {
                             cameraOn.setText(message.toString());
                             System.out.println("camera: " + message.toString());
-                            notif.setText(notif.getText().toString() + " " + message.toString());;
+                            notif.setText(notif.getText().toString() + "\n" + message.toString());;
                         }
                         else if(topic.equals("/petprotector/feeder_actuator/data"))
                         {
@@ -164,13 +175,14 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                                 time = time.substring(13);
                                 time = time.substring(0, time.length() - 2);
                                 feedingTimes.setText(time);
+                                System.out.println( "Timer: " +message);
                                 System.out.println("TIME= " + time);
 
                                 String formN = message.toString();
                                 formN = formN.substring(1);
                                 formN = formN.substring(0, formN.length() - 9);
 
-                                notif.setText(notif.getText().toString() + " " + formN);
+                                notif.setText(notif.getText().toString() + "\n" + formN);
                             }
                             if(message.toString().contains("WEIGHT"))
                             {
@@ -178,24 +190,53 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                                 weight = weight.substring(14);
                                 weight = weight.substring(0, weight.length() - 2);
                                 feedAmount.setText(weight);
+                                System.out.println( "Weight: " +message);
+
 
                                 String formN = message.toString();
                                 formN = formN.substring(1);
                                 formN = formN.substring(0, formN.length() - 7);
 
-                                notif.setText(notif.getText().toString() + " " + formN);;
+                                notif.setText(notif.getText().toString() + "\n" + formN);;
                             }
 
                         }
                         else if(topic.equals("/petprotector/temperature_sensor"))
                         {
                             petTemp.setText(message.toString());
-                            notif.setText(notif.getText().toString() + " " + message.toString());;
                         }
                         else if(topic.equals("/petprotector/collar_battery_sensor"))
                         {
                             collarBattery.setText(message.toString());
-                            notif.setText(notif.getText().toString() + " " + message.toString());;
+                        }
+//                        else if(topic.equals("/petprotector/gps_sensor"))
+//                        {
+//                            notif.setText(notif.getText().toString() + "\n" + message.toString());
+//                        }
+                        else if(topic.equals("/petprotector/temperature_sensor"))
+                        {
+                            notif.setText(notif.getText().toString() + "/n" + message.toString());
+                        }
+                        else if(topic.equals("/petprotector/food_weight_sensor"))
+                        {
+                            feedWeight.setText(message.toString());
+                        }
+                        else if(topic.equals("/petprotector/speaker_actuator/data"))
+                        {
+                            speakerO.setText(message.toString());
+                        }
+                        else if(topic.equals("/petprotector/microphone_actuator/data"))
+                        {
+                            micOn.setText(message.toString());
+                        }
+                        else if(topic.equals("/petprotector/user_notification"))
+                        {
+                            notif.setText(notif.getText().toString() + "\n" + message.toString());
+                            System.out.println("Notification: " + message.toString());
+                        }
+                        else if(topic.equals("/petprotector/motion_sensor"))
+                        {
+                            motion.setText(message.toString());
                         }
 
                     }
@@ -230,6 +271,8 @@ public class InformationFragment extends Fragment implements View.OnClickListene
         String secondHalf = feedTime.substring(2);
         String full = firstHalf + secondHalf;
         publish("/petprotector/feeder_actuator/feeding_times", full);
+
+
         publish("/petprotector/speaker_actuator", speakerOn);
         publish("/petprotector/microphone_actuator", microphoneOn);
         System.out.println("Feed time: " + feedTime);
