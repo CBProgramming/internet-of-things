@@ -10,13 +10,13 @@
     <fragment
         android:id="@+id/navigation_information"
         android:name="uk.ac.tees.t7099806.iotbottomnavigation.ui.Information.InformationFragment"
-        android:label="settings"
+        android:label="Information"
         tools:layout="@layout/fragment_information" />
 
     <fragment
         android:id="@+id/navigation_GPS"
         android:name="uk.ac.tees.t7099806.iotbottomnavigation.ui.GPS.GPSFragment"
-        android:label="gps"
+        android:label="Dog's Location"
         tools:layout="@layout/fragment_gps" />
 
     <fragment

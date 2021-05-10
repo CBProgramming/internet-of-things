@@ -163,7 +163,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                         if(topic.equals("/petprotector/camera_actuator/data"))
                         {
                             cameraOn.setText(message.toString());
-                            System.out.println("camera: " + message.toString());
                             notif.setText(notif.getText().toString() + "\n" + message.toString());;
                         }
                         else if(topic.equals("/petprotector/feeder_actuator/data"))
@@ -182,6 +181,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                                 formN = formN.substring(1);
                                 formN = formN.substring(0, formN.length() - 9);
 
+                                //System.out.println("formN= "  + formN);
                                 notif.setText(notif.getText().toString() + "\n" + formN);
                             }
                             if(message.toString().contains("WEIGHT"))
@@ -209,10 +209,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                         {
                             collarBattery.setText(message.toString());
                         }
-//                        else if(topic.equals("/petprotector/gps_sensor"))
-//                        {
-//                            notif.setText(notif.getText().toString() + "\n" + message.toString());
-//                        }
                         else if(topic.equals("/petprotector/temperature_sensor"))
                         {
                             notif.setText(notif.getText().toString() + "/n" + message.toString());
@@ -232,7 +228,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                         else if(topic.equals("/petprotector/user_notification"))
                         {
                             notif.setText(notif.getText().toString() + "\n" + message.toString());
-                            System.out.println("Notification: " + message.toString());
                         }
                         else if(topic.equals("/petprotector/motion_sensor"))
                         {
@@ -262,15 +257,18 @@ public class InformationFragment extends Fragment implements View.OnClickListene
         speakerOn = s;
         microphoneOn= m;
 
-        publish("/petprotector/camera_actuator", cameraO);
-        publish("/petprotector/feeder_actuator/meal_size", foodAmount);
-
-
-
         String firstHalf = feedTime.substring(0, feedTime.length() - 3);
         String secondHalf = feedTime.substring(2);
         String full = firstHalf + secondHalf;
-        publish("/petprotector/feeder_actuator/feeding_times", full);
+        System.out.println("full = " + full);
+        publish("/petprotector/feeder_actuator/feeding_times", feedTime);
+        publish("/petprotector/feeder_actuator/meal_size", foodAmount);
+        publish("/petprotector/camera_actuator", cameraO);
+
+
+
+
+
 
 
         publish("/petprotector/speaker_actuator", speakerOn);
